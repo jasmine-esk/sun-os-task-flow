@@ -6916,7 +6916,8 @@ Last updated: May 2026 · Companion to <code>wayeez_task_component_spec.html</co
       const ic = backlogItem.querySelector('.ic')?.textContent || '☐';
       const ttl = backlogItem.querySelector('.ttl')?.textContent || '';
       const pri = backlogItem.querySelector('.pri-mini')?.textContent || null;
-      dragPayload = { type: 'backlog', icon: ic, title: ttl, priority: pri, sourceEl: backlogItem };
+      const existingTaskId = backlogItem.getAttribute('data-task-id') || null;
+      dragPayload = { type: 'backlog', icon: ic, title: ttl, priority: pri, sourceEl: backlogItem, existingTaskId };
       backlogItem.classList.add('dragging');
       document.body.classList.add('dnd-backlog-active');
     } else if (stageTask && stageTask.getAttribute('data-task-id')) {
@@ -6977,24 +6978,50 @@ Last updated: May 2026 · Companion to <code>wayeez_task_component_spec.html</co
       const owner = col.getAttribute('data-owner');
       if (!owner) return;
       const isSunrun = owner === 'sunrun';
-      addTaskToColumn(owner, dragPayload.title, dragPayload.icon, isSunrun, false);
-      // If priority was on the backlog item, transfer it to the new task
-      if (dragPayload.priority) {
-        const lastTask = document.querySelectorAll('#proto-tasks-' + owner + ' .stage-task.added');
-        const newTask = lastTask[lastTask.length - 1];
-        if (newTask) {
-          const tid = newTask.getAttribute('data-task-id');
-          if (tid && TASK_DATA[tid]) {
-            TASK_DATA[tid].priority = dragPayload.priority;
-            // Add visual pill in column
-            const pill = document.createElement('span');
-            pill.className = 'col-priority-pill ' + dragPayload.priority.toLowerCase();
-            pill.textContent = dragPayload.priority;
-            const ic = newTask.querySelector('.ic');
-            if (ic) ic.parentNode.insertBefore(pill, ic);
+
+      // If this backlog item was originally a stage task (has data-task-id), resurrect it
+      const existingId = dragPayload.existingTaskId;
+      if (existingId && TASK_DATA[existingId]) {
+        // Re-attach existing task with preserved data
+        const data = TASK_DATA[existingId];
+        // Update owner if it changed
+        data.owner = owner;
+        if (isSunrun && !data.isSunrun) data.isSunrun = true;
+        const list = document.getElementById('proto-tasks-' + owner);
+        const task = document.createElement('div');
+        task.className = 'stage-task added glow';
+        if (isSunrun) task.classList.add('sunrun-task');
+        task.setAttribute('data-task-id', existingId);
+        let inner = '<div class="check"></div>';
+        if (data.priority) {
+          inner += '<span class="col-priority-pill ' + data.priority.toLowerCase() + '">' + data.priority + '</span>';
+        }
+        inner += '<div class="ic">' + (data.icon || '☐') + '</div>';
+        inner += '<span class="ttl">' + escapeHtml(data.title) + '</span>';
+        if (isSunrun && data.status === 'running') inner += '<span class="running-tag">running…</span>';
+        task.innerHTML = inner;
+        list.appendChild(task);
+        setTimeout(() => task.classList.remove('glow'), 1700);
+      } else {
+        addTaskToColumn(owner, dragPayload.title, dragPayload.icon, isSunrun, false);
+        // If priority was on the backlog item, transfer it to the new task
+        if (dragPayload.priority) {
+          const lastTask = document.querySelectorAll('#proto-tasks-' + owner + ' .stage-task.added');
+          const newTask = lastTask[lastTask.length - 1];
+          if (newTask) {
+            const tid = newTask.getAttribute('data-task-id');
+            if (tid && TASK_DATA[tid]) {
+              TASK_DATA[tid].priority = dragPayload.priority;
+              const pill = document.createElement('span');
+              pill.className = 'col-priority-pill ' + dragPayload.priority.toLowerCase();
+              pill.textContent = dragPayload.priority;
+              const ic = newTask.querySelector('.ic');
+              if (ic) ic.parentNode.insertBefore(pill, ic);
+            }
           }
         }
       }
+
       // Remove from source bucket + decrement count
       if (dragPayload.sourceEl) {
         const srcBucket = dragPayload.sourceEl.closest('.backlog-bucket');
@@ -7017,7 +7044,8 @@ Last updated: May 2026 · Companion to <code>wayeez_task_component_spec.html</co
       if (items) {
         const newItem = document.createElement('div');
         newItem.className = 'backlog-item';
-        newItem.draggable = true;
+        newItem.setAttribute('draggable', 'true');
+        newItem.setAttribute('data-task-id', taskId);  // preserve task id for round-trip
         let inner = '';
         if (data.priority) inner += '<span class="pri-mini ' + data.priority.toLowerCase() + '">' + data.priority + '</span>';
         inner += '<span class="ic">' + (data.icon || '☐') + '</span>';
