@@ -924,8 +924,299 @@
     padding: 11px 16px;
     display: flex;
     align-items: center;
-    gap: 14px;
+    gap: 10px;
   }
+  .stage-topbar .topbar-btn {
+    margin-left: auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: white;
+    border: 1px solid var(--hairline);
+    color: var(--ink);
+    padding: 6px 11px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-family: inherit;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.15s;
+  }
+  .stage-topbar .topbar-btn:hover {
+    background: var(--bg-soft);
+    border-color: var(--ink-soft);
+  }
+  .stage-topbar .topbar-btn .ct {
+    font-size: 10px;
+    background: var(--bg-soft);
+    color: var(--ink-soft);
+    padding: 1px 5px;
+    border-radius: 3px;
+    font-family: 'SF Mono', monospace;
+    font-weight: 700;
+  }
+  .stage-topbar .global-create { margin-left: 0 !important; }
+
+  /* Transcripts modal */
+  .transcripts-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(20,18,14,0.45);
+    display: none;
+    align-items: flex-start;
+    justify-content: center;
+    z-index: 130;
+    opacity: 0;
+    transition: opacity 200ms;
+    padding: 60px 20px;
+  }
+  .transcripts-overlay.active { display: flex; opacity: 1; }
+  .transcripts-modal {
+    background: white;
+    border-radius: 12px;
+    width: 720px;
+    max-width: 96vw;
+    max-height: calc(100vh - 120px);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.30);
+    transform: scale(0.96);
+    transition: transform 200ms ease-out;
+  }
+  .transcripts-overlay.active .transcripts-modal { transform: scale(1); }
+  .transcripts-head {
+    padding: 16px 22px;
+    border-bottom: 1px solid var(--hairline);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: var(--bg-panel);
+  }
+  .transcripts-head .av {
+    width: 30px; height: 30px;
+    border-radius: 8px;
+    background: rgba(111,95,168,0.12);
+    color: var(--sunrun);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+  .transcripts-head .meta { flex: 1; min-width: 0; }
+  .transcripts-head .ttl {
+    font-family: 'Tiempos Headline', Georgia, serif;
+    font-size: 18px;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+  }
+  .transcripts-head .src-line {
+    font-size: 11.5px;
+    color: var(--ink-soft);
+    margin-top: 2px;
+  }
+  .transcripts-head .x {
+    background: none;
+    border: none;
+    color: var(--ink-faint);
+    font-size: 18px;
+    cursor: pointer;
+    padding: 4px 8px;
+    font-family: inherit;
+  }
+  .transcripts-head .x:hover { color: var(--ink); }
+  .transcripts-stats {
+    padding: 14px 22px;
+    border-bottom: 1px solid var(--hairline);
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+  }
+  .transcripts-stats .stat {
+    text-align: center;
+  }
+  .transcripts-stats .stat .num {
+    font-family: 'Tiempos Headline', Georgia, serif;
+    font-size: 22px;
+    font-weight: 500;
+    color: var(--ink);
+    line-height: 1;
+  }
+  .transcripts-stats .stat .lbl-text {
+    font-size: 9.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--ink-faint);
+    font-weight: 600;
+    margin-top: 4px;
+  }
+  .transcripts-list {
+    flex: 1;
+    overflow-y: auto;
+    padding: 12px 14px 18px;
+  }
+  .mtg-card {
+    background: white;
+    border: 1px solid var(--hairline);
+    border-radius: 9px;
+    margin-bottom: 8px;
+    overflow: hidden;
+    transition: border-color 0.15s, box-shadow 0.15s;
+  }
+  .mtg-card:hover { border-color: var(--ink-soft); }
+  .mtg-card.expanded { border-color: var(--accent); box-shadow: 0 4px 14px rgba(180,122,63,0.10); }
+  .mtg-head {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 14px;
+    cursor: pointer;
+  }
+  .mtg-head .when-badge {
+    background: var(--bg);
+    border-radius: 6px;
+    padding: 6px 9px;
+    text-align: center;
+    flex-shrink: 0;
+    line-height: 1;
+  }
+  .mtg-head .when-badge .month {
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--ink-faint);
+    font-weight: 700;
+    margin-bottom: 3px;
+  }
+  .mtg-head .when-badge .day {
+    font-family: 'Tiempos Headline', Georgia, serif;
+    font-size: 18px;
+    font-weight: 500;
+    color: var(--ink);
+  }
+  .mtg-head .info { flex: 1; min-width: 0; }
+  .mtg-head .info .name {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--ink);
+    margin-bottom: 3px;
+    line-height: 1.3;
+  }
+  .mtg-head .info .meta {
+    font-size: 11px;
+    color: var(--ink-faint);
+    font-family: 'SF Mono', monospace;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .mtg-head .info .meta .pill {
+    background: var(--bg-soft);
+    padding: 1px 6px;
+    border-radius: 3px;
+    font-weight: 600;
+  }
+  .mtg-head .info .meta .pill.warn {
+    background: rgba(194,106,63,0.12);
+    color: var(--warn);
+  }
+  .mtg-head .info .meta .pill.good {
+    background: rgba(90,143,90,0.12);
+    color: var(--good);
+  }
+  .mtg-head .chev {
+    color: var(--ink-faint);
+    font-size: 11px;
+    transition: transform 0.15s;
+  }
+  .mtg-card.expanded .mtg-head .chev { transform: rotate(90deg); color: var(--accent); }
+
+  .mtg-body {
+    display: none;
+    padding: 0 14px 14px;
+    border-top: 1px solid var(--hairline);
+    margin-top: 0;
+  }
+  .mtg-card.expanded .mtg-body { display: block; }
+  .mtg-section h6 {
+    font-size: 9.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--ink-faint);
+    font-weight: 700;
+    margin: 14px 0 8px;
+  }
+  .mtg-transcript {
+    background: var(--bg);
+    border-left: 3px solid var(--ink-faint);
+    padding: 10px 13px;
+    border-radius: 0 6px 6px 0;
+    font-size: 12px;
+    line-height: 1.55;
+    color: var(--ink-soft);
+    font-style: italic;
+  }
+  .mtg-transcript .speaker {
+    font-style: normal;
+    color: var(--ink);
+    font-weight: 600;
+    font-size: 11px;
+  }
+  .mtg-transcript .timecode {
+    font-family: 'SF Mono', monospace;
+    font-size: 10px;
+    color: var(--ink-faint);
+    font-weight: 500;
+  }
+  .mtg-task-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 10px;
+    background: var(--bg);
+    border-radius: 5px;
+    margin-bottom: 3px;
+    font-size: 12px;
+    color: var(--ink);
+    cursor: pointer;
+  }
+  .mtg-task-row:hover { background: var(--bg-soft); }
+  .mtg-task-row .ic { font-size: 12px; flex-shrink: 0; }
+  .mtg-task-row .ttl { flex: 1; }
+  .mtg-task-row .status-pill {
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    font-weight: 700;
+    padding: 1px 6px;
+    border-radius: 3px;
+    font-family: 'SF Mono', monospace;
+    flex-shrink: 0;
+  }
+  .mtg-task-row .status-pill.draft { background: rgba(180,122,63,0.15); color: var(--accent); }
+  .mtg-task-row .status-pill.todo { background: var(--bg-soft); color: var(--ink-soft); }
+  .mtg-task-row .status-pill.done { background: rgba(90,143,90,0.12); color: var(--good); }
+  .mtg-task-row .status-pill.archived { background: rgba(0,0,0,0.06); color: var(--ink-faint); text-decoration: line-through; }
+  .mtg-task-row .status-pill.in-progress { background: rgba(180,122,63,0.12); color: var(--accent); }
+  .mtg-actions {
+    display: flex;
+    gap: 6px;
+    margin-top: 12px;
+  }
+  .mtg-actions button {
+    background: white;
+    border: 1px solid var(--hairline);
+    border-radius: 5px;
+    padding: 5px 10px;
+    font-size: 11.5px;
+    cursor: pointer;
+    font-family: inherit;
+    color: var(--ink-soft);
+    font-weight: 500;
+  }
+  .mtg-actions button:hover { background: var(--bg-soft); color: var(--ink); }
+  .mtg-actions button.primary { background: var(--ink); color: white; border-color: var(--ink); }
+  .mtg-actions button.primary:hover { background: #333; }
   .stage-topbar .week-label {
     font-family: "Tiempos Headline", Georgia, serif;
     font-size: 16px;
@@ -2662,6 +2953,113 @@
   }
   .widget-sunrun .sr-row .num.warn { color: var(--warn); }
   .widget-sunrun .sr-row .num.run { color: var(--sunrun); }
+
+  /* === Subtasks visible inline in columns === */
+  .stage-task .expand-chevron {
+    background: none;
+    border: none;
+    color: var(--ink-faint);
+    font-size: 8.5px;
+    cursor: pointer;
+    padding: 0 3px;
+    transition: transform 0.15s, color 0.15s;
+    font-family: inherit;
+    flex-shrink: 0;
+    line-height: 1;
+    margin-right: -2px;
+  }
+  .stage-task .expand-chevron:hover { color: var(--ink); }
+  .stage-task.expanded .expand-chevron {
+    transform: rotate(90deg);
+    color: var(--ink);
+  }
+  .stage-task .subtask-mini-count {
+    display: inline-flex;
+    align-items: center;
+    font-size: 9.5px;
+    color: var(--ink-faint);
+    font-family: 'SF Mono', monospace;
+    background: var(--bg-soft);
+    padding: 1px 6px;
+    border-radius: 3px;
+    font-weight: 600;
+    flex-shrink: 0;
+    margin-left: 4px;
+  }
+  .stage-task.expanded .subtask-mini-count {
+    background: var(--accent-soft);
+    color: var(--accent);
+  }
+  .stage-subtasks-wrap {
+    margin: 1px 0 6px;
+  }
+  .stage-subtasks {
+    padding-left: 16px;
+    border-left: 2px solid var(--hairline);
+    margin-left: 14px;
+  }
+  .stage-subtask {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 5px 7px;
+    border-radius: 4px;
+    font-size: 12px;
+    color: var(--ink-soft);
+    cursor: pointer;
+    margin-bottom: 1px;
+    line-height: 1.3;
+  }
+  .stage-subtask:hover { background: var(--bg-soft); color: var(--ink); }
+  .stage-subtask .check {
+    width: 12px; height: 12px;
+    border: 1.5px solid var(--ink-faint);
+    border-radius: 3px;
+    flex-shrink: 0;
+    position: relative;
+    cursor: pointer;
+  }
+  .stage-subtask.done .check {
+    background: var(--good);
+    border-color: var(--good);
+  }
+  .stage-subtask.done .check::after {
+    content: '✓';
+    color: white;
+    font-size: 8px;
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    font-weight: bold;
+  }
+  .stage-subtask.done .ttl {
+    text-decoration: line-through;
+    color: var(--ink-faint);
+  }
+  .stage-subtask .ttl { flex: 1; }
+  .stage-subtask .sunrun-suggest-mini {
+    font-size: 8.5px;
+    background: rgba(111,95,168,0.10);
+    color: var(--sunrun);
+    padding: 1px 6px;
+    border-radius: 3px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    flex-shrink: 0;
+  }
+  .stage-subtask.highlight,
+  .dt-subtask-row.highlight {
+    animation: subtask-flash 1.8s ease-out;
+  }
+  @keyframes subtask-flash {
+    0% { background: var(--accent-soft); }
+    100% { background: transparent; }
+  }
+  /* For Sunrun missions, the subtask border-color signals provenance */
+  .stage-task.sunrun-task + .stage-subtasks-wrap .stage-subtasks {
+    border-left-color: rgba(111,95,168,0.4);
+  }
 
   /* === Drag-and-drop visuals === */
   .dragging { opacity: 0.4 !important; }
@@ -4882,6 +5280,7 @@ Last updated: May 2026 · Companion to <code>wayeez_task_component_spec.html</co
 <div class="stage" id="proto-stage">
   <div class="stage-topbar">
     <span class="week-label">Week of May 4</span>
+    <button class="topbar-btn" id="proto-transcripts-btn" title="All Sunspoke transcripts">🎙 Transcripts <span class="ct">12</span></button>
     <button class="global-create" id="proto-global-create">+ Create task <span class="keyboard-hint">⌘N</span></button>
   </div>
   <div class="stage-3panel">
@@ -5189,6 +5588,13 @@ Last updated: May 2026 · Companion to <code>wayeez_task_component_spec.html</co
 <!-- Ref/Save peek overlay (fixed-position; opens when a save card is clicked) -->
 <div class="ref-peek-overlay" id="ref-peek-overlay">
   <div class="ref-peek" id="ref-peek-content">
+    <!-- contents injected by JS -->
+  </div>
+</div>
+
+<!-- Transcripts modal (Sunspoke captures) -->
+<div class="transcripts-overlay" id="transcripts-overlay">
+  <div class="transcripts-modal" id="transcripts-modal">
     <!-- contents injected by JS -->
   </div>
 </div>
@@ -7104,6 +7510,12 @@ Last updated: May 2026 · Companion to <code>wayeez_task_component_spec.html</co
     openFullModal(null, false);
   });
 
+  // Transcripts button
+  document.getElementById('proto-transcripts-btn').addEventListener('click', openTranscriptsModal);
+  document.getElementById('transcripts-overlay').addEventListener('click', (e) => {
+    if (e.target.id === 'transcripts-overlay') closeTranscriptsModal();
+  });
+
   // Manual: inline + Add task in each column
   document.querySelectorAll('.stage-add-row').forEach(row => {
     row.addEventListener('click', (e) => {
@@ -7115,9 +7527,32 @@ Last updated: May 2026 · Companion to <code>wayeez_task_component_spec.html</co
 
   // Click any task → open detail panel (delegated for new tasks)
   document.querySelector('.stage-canvas').addEventListener('click', (e) => {
+    // Subtask check → toggle done
+    const subCheck = e.target.closest && e.target.closest('.stage-subtask .check');
+    if (subCheck) {
+      const subEl = subCheck.closest('.stage-subtask');
+      if (subEl) {
+        const parentId = subEl.getAttribute('data-parent');
+        const subIdx = parseInt(subEl.getAttribute('data-sub-idx'));
+        if (parentId && !isNaN(subIdx)) {
+          toggleColumnSubtaskDone(parentId, subIdx);
+        }
+      }
+      return;
+    }
+    // Subtask body → open parent with subtask scrolled-to + highlighted
+    const subEl = e.target.closest && e.target.closest('.stage-subtask');
+    if (subEl) {
+      const parentId = subEl.getAttribute('data-parent');
+      const subIdx = parseInt(subEl.getAttribute('data-sub-idx'));
+      if (parentId && !isNaN(subIdx)) {
+        openParentForSubtask(parentId, subIdx);
+      }
+      return;
+    }
+    // Parent task click
     const taskEl = e.target.closest('.stage-task');
     if (!taskEl) return;
-    // Don't open if clicking the checkbox specifically (reserve for future toggle)
     const id = taskEl.getAttribute('data-task-id');
     if (!id) return;
     openTaskDetail(id);
@@ -7138,7 +7573,9 @@ Last updated: May 2026 · Companion to <code>wayeez_task_component_spec.html</co
       openFullModal(null, false);
     }
     if (e.key === 'Escape') {
-      if (document.getElementById('ref-peek-overlay').classList.contains('active')) {
+      if (document.getElementById('transcripts-overlay').classList.contains('active')) {
+        closeTranscriptsModal();
+      } else if (document.getElementById('ref-peek-overlay').classList.contains('active')) {
         closeRefPeek();
       } else if (document.getElementById('proto-overlay').classList.contains('active')) {
         cancelFullFlow();
@@ -7152,6 +7589,322 @@ Last updated: May 2026 · Companion to <code>wayeez_task_component_spec.html</co
   document.getElementById('ref-peek-overlay').addEventListener('click', (e) => {
     if (e.target.id === 'ref-peek-overlay') closeRefPeek();
   });
+
+  // === Transcripts (Sunspoke meeting captures) ===
+  const TRANSCRIPTS = [
+    {
+      id: 'mtg-apr30-product',
+      day: 30, month: 'Apr',
+      name: 'Product mtg — Sunline interface review',
+      duration: '47m',
+      speakers: ['Jazz', 'Wayeez'],
+      tasksExtracted: 4,
+      tasksReady: 2,
+      tasksAwaiting: 2,
+      tasksArchived: 0,
+      transcriptExcerpt: [
+        { speaker: 'Jazz', timecode: '12:34', text: '"…we said we want Suncraft launched before end of May, but we haven\'t locked the date — somewhere between May 12 (after Aether sunset) and May 26 (before Memorial Day)."' },
+        { speaker: 'Wayeez', timecode: '13:08', text: '"I think May 19 is realistic. May 12 is tight given the migration emails still going out."' }
+      ],
+      tasks: [
+        { ic: '🚀', ttl: 'Decide Suncraft launch date', status: 'draft', taskId: 'mtg-suncraft-launch' },
+        { ic: '🎨', ttl: 'Sunline interface — empty states', status: 'in-progress', taskId: 'empty-states' },
+        { ic: '📐', ttl: 'Task component v2 — pixel pass', status: 'todo', taskId: 'task-component' },
+        { ic: '✉', ttl: 'Email Karim about pricing', status: 'archived', taskId: null }
+      ]
+    },
+    {
+      id: 'mtg-apr28-design',
+      day: 28, month: 'Apr',
+      name: 'Design crit — Sunline detail panel',
+      duration: '32m',
+      speakers: ['Jazz', 'Wayeez'],
+      tasksExtracted: 3,
+      tasksReady: 3,
+      tasksAwaiting: 0,
+      tasksArchived: 0,
+      transcriptExcerpt: [
+        { speaker: 'Wayeez', timecode: '08:14', text: '"The detail panel is too dense. Need to split it — chat for conversation, info for data."' },
+        { speaker: 'Jazz', timecode: '09:02', text: '"Agreed. And we should pin the rationale at the top so context never gets lost."' }
+      ],
+      tasks: [
+        { ic: '📐', ttl: 'Split detail panel into Chat + Info tabs', status: 'done', taskId: null },
+        { ic: '📌', ttl: 'Pin rationale at top of Thread', status: 'done', taskId: null },
+        { ic: '🎨', ttl: 'Refine status pill colors', status: 'done', taskId: null }
+      ]
+    },
+    {
+      id: 'mtg-apr27-1on1',
+      day: 27, month: 'Apr',
+      name: '1:1 with Wayeez — weekly check-in',
+      duration: '28m',
+      speakers: ['Jazz', 'Wayeez'],
+      tasksExtracted: 5,
+      tasksReady: 1,
+      tasksAwaiting: 0,
+      tasksArchived: 4,
+      transcriptExcerpt: [
+        { speaker: 'Wayeez', timecode: '02:11', text: '"…thinking about whether we should rename Connections to Memory. Just exploring."' },
+        { speaker: 'Jazz', timecode: '04:30', text: '"Let\'s shelf that for now, focus on shipping the prototype."' }
+      ],
+      tasks: [
+        { ic: '🎨', ttl: 'Wayeez Q2 review notes', status: 'todo', taskId: null },
+        { ic: '💭', ttl: 'Rename Connections → Memory (?)', status: 'archived', taskId: null },
+        { ic: '💭', ttl: 'Rethink Sunrun config card layout', status: 'archived', taskId: null },
+        { ic: '💭', ttl: 'Drag-drop on mobile thoughts', status: 'archived', taskId: null },
+        { ic: '💭', ttl: 'Maybe add dark mode someday', status: 'archived', taskId: null }
+      ]
+    },
+    {
+      id: 'mtg-apr26-investor',
+      day: 26, month: 'Apr',
+      name: 'Investor call — partner intro',
+      duration: '52m',
+      speakers: ['Jazz', 'External'],
+      tasksExtracted: 1,
+      tasksReady: 1,
+      tasksAwaiting: 0,
+      tasksArchived: 0,
+      transcriptExcerpt: [
+        { speaker: 'Jazz', timecode: '47:22', text: '"I\'ll send you the latest deck and a follow-up note by Monday."' }
+      ],
+      tasks: [
+        { ic: '📞', ttl: 'Investor call prep — deck review', status: 'todo', taskId: 'investor-prep' }
+      ]
+    },
+    {
+      id: 'mtg-apr24-suncraft',
+      day: 24, month: 'Apr',
+      name: 'Suncraft strategy — pricing tiers',
+      duration: '41m',
+      speakers: ['Jazz', 'Wayeez', 'Michael'],
+      tasksExtracted: 3,
+      tasksReady: 2,
+      tasksAwaiting: 0,
+      tasksArchived: 1,
+      transcriptExcerpt: [
+        { speaker: 'Michael', timecode: '15:20', text: '"$50K is fine for the build. We need to lock the tiers before we go public."' }
+      ],
+      tasks: [
+        { ic: '🎯', ttl: 'Finalize Suncraft pricing tiers', status: 'todo', taskId: 'pricing-tiers' },
+        { ic: '✉', ttl: 'Send Aether sunset email batch 2', status: 'in-progress', taskId: 'aether-sunset' },
+        { ic: '💭', ttl: 'Maybe add a starter tier (?)', status: 'archived', taskId: null }
+      ]
+    },
+    {
+      id: 'mtg-apr20-aither',
+      day: 20, month: 'Apr',
+      name: 'Aither sunset planning',
+      duration: '38m',
+      speakers: ['Jazz', 'Wayeez'],
+      tasksExtracted: 6,
+      tasksReady: 0,
+      tasksAwaiting: 0,
+      tasksArchived: 0,
+      transcriptExcerpt: [
+        { speaker: 'Jazz', timecode: '04:12', text: '"We need to migrate ~30 clients in 3 batches. Email template, personalize the high-touch ones, track responses."' }
+      ],
+      tasks: [
+        { ic: '✉', ttl: 'Send Aether sunset email batch 1', status: 'done', taskId: null },
+        { ic: '✉', ttl: 'Send Aether sunset email batch 2', status: 'in-progress', taskId: 'aether-sunset' },
+        { ic: '✉', ttl: 'Send Aether sunset email batch 3', status: 'todo', taskId: null },
+        { ic: '📋', ttl: 'Aether handoff doc', status: 'in-progress', taskId: null },
+        { ic: '📞', ttl: 'Investor call — Karim L.', status: 'done', taskId: null },
+        { ic: '🎨', ttl: 'Sunline mockup v1', status: 'done', taskId: null }
+      ]
+    }
+  ];
+
+  function openTranscriptsModal() {
+    const totalMtgs = TRANSCRIPTS.length;
+    const totalTasks = TRANSCRIPTS.reduce((sum, m) => sum + m.tasksExtracted, 0);
+    const totalReady = TRANSCRIPTS.reduce((sum, m) => sum + m.tasksReady, 0);
+    const totalArchived = TRANSCRIPTS.reduce((sum, m) => sum + m.tasksArchived, 0);
+
+    let html = '';
+    html += '<div class="transcripts-head">';
+    html += '<div class="av">🎙</div>';
+    html += '<div class="meta"><div class="ttl">Sunspoke transcripts</div>';
+    html += '<div class="src-line">All meetings auto-captured this month</div></div>';
+    html += '<button class="x" onclick="closeTranscriptsModal()">✕</button>';
+    html += '</div>';
+
+    html += '<div class="transcripts-stats">';
+    html += '<div class="stat"><div class="num">' + totalMtgs + '</div><div class="lbl-text">Meetings</div></div>';
+    html += '<div class="stat"><div class="num">' + totalTasks + '</div><div class="lbl-text">Tasks extracted</div></div>';
+    html += '<div class="stat"><div class="num">' + totalReady + '</div><div class="lbl-text">Currently ready</div></div>';
+    html += '<div class="stat"><div class="num">' + totalArchived + '</div><div class="lbl-text">Archived (musing)</div></div>';
+    html += '</div>';
+
+    html += '<div class="transcripts-list">';
+    TRANSCRIPTS.forEach(m => {
+      html += '<div class="mtg-card" id="mtg-' + m.id + '">';
+      html += '<div class="mtg-head" onclick="toggleMeeting(\'' + m.id + '\')">';
+      html += '<div class="when-badge"><div class="month">' + m.month + '</div><div class="day">' + m.day + '</div></div>';
+      html += '<div class="info">';
+      html += '<div class="name">' + escapeHtml(m.name) + '</div>';
+      html += '<div class="meta">';
+      html += '<span class="pill">' + m.duration + '</span>';
+      html += '<span class="pill">' + m.speakers.length + ' speakers</span>';
+      html += '<span class="pill">' + m.tasksExtracted + ' tasks</span>';
+      if (m.tasksAwaiting > 0) html += '<span class="pill warn">' + m.tasksAwaiting + ' awaiting input</span>';
+      if (m.tasksReady > 0 && m.tasksAwaiting === 0) html += '<span class="pill good">all reviewed</span>';
+      html += '</div>';
+      html += '</div>';
+      html += '<span class="chev">▶</span>';
+      html += '</div>';
+
+      html += '<div class="mtg-body">';
+      html += '<div class="mtg-section"><h6>Transcript excerpt</h6>';
+      html += '<div class="mtg-transcript">';
+      m.transcriptExcerpt.forEach(line => {
+        html += '<div style="margin-bottom:6px;"><span class="speaker">' + escapeHtml(line.speaker) + '</span> <span class="timecode">@ ' + line.timecode + '</span><br>' + escapeHtml(line.text) + '</div>';
+      });
+      html += '</div></div>';
+      html += '<div class="mtg-section"><h6>Extracted tasks (' + m.tasks.length + ')</h6>';
+      m.tasks.forEach(t => {
+        const cls = 'mtg-task-row' + (t.taskId ? ' clickable' : '');
+        const onclick = t.taskId ? 'event.stopPropagation(); closeTranscriptsModal(); openTaskDetail(\'' + t.taskId + '\');' : '';
+        html += '<div class="' + cls + '" ' + (onclick ? 'onclick="' + onclick + '"' : '') + '>';
+        html += '<span class="ic">' + t.ic + '</span>';
+        html += '<span class="ttl">' + escapeHtml(t.ttl) + '</span>';
+        const stLabel = { draft: 'Draft', todo: 'To do', done: 'Done', archived: 'Archived', 'in-progress': 'In progress' }[t.status] || t.status;
+        html += '<span class="status-pill ' + t.status + '">' + stLabel + '</span>';
+        html += '</div>';
+      });
+      html += '</div>';
+      html += '<div class="mtg-actions">';
+      html += '<button class="primary">▶ Listen to recording</button>';
+      html += '<button>Open full transcript</button>';
+      html += '<button>Re-extract tasks</button>';
+      html += '</div>';
+      html += '</div>';
+      html += '</div>';
+    });
+    html += '</div>';
+
+    document.getElementById('transcripts-modal').innerHTML = html;
+    document.getElementById('transcripts-overlay').classList.add('active');
+    proto.set('TRANSCRIPTS', 'Opened Sunspoke transcripts. ' + totalMtgs + ' meetings · ' + totalTasks + ' tasks extracted. Click any meeting card to expand.');
+  }
+
+  function closeTranscriptsModal() {
+    document.getElementById('transcripts-overlay').classList.remove('active');
+  }
+
+  function toggleMeeting(id) {
+    const card = document.getElementById('mtg-' + id);
+    if (card) card.classList.toggle('expanded');
+  }
+
+  // === Subtasks rendered inline in columns ===
+  function injectSubtasksIntoColumns() {
+    document.querySelectorAll('.stage-task[data-task-id]').forEach(taskEl => {
+      const id = taskEl.getAttribute('data-task-id');
+      const data = TASK_DATA[id];
+      if (!data || !data.subtasks || !data.subtasks.length) return;
+      // Skip if already injected
+      if (taskEl.nextElementSibling && taskEl.nextElementSibling.classList.contains('stage-subtasks-wrap')) return;
+
+      // Add expand chevron at front
+      if (!taskEl.querySelector('.expand-chevron')) {
+        const chev = document.createElement('button');
+        chev.className = 'expand-chevron';
+        chev.innerHTML = '▶';
+        chev.title = 'Show subtasks';
+        chev.onclick = (e) => {
+          e.stopPropagation();
+          toggleStageSubtasks(id);
+        };
+        taskEl.insertBefore(chev, taskEl.firstChild);
+      }
+
+      // Add count pill after title
+      if (!taskEl.querySelector('.subtask-mini-count')) {
+        const ttl = taskEl.querySelector('.ttl');
+        if (ttl) {
+          const doneCount = data.subtasks.filter(s => s.done).length;
+          const countEl = document.createElement('span');
+          countEl.className = 'subtask-mini-count';
+          countEl.innerHTML = doneCount + '/' + data.subtasks.length;
+          ttl.parentNode.insertBefore(countEl, ttl.nextSibling);
+        }
+      }
+
+      // Insert collapsed subtasks wrapper after the task row
+      const wrap = document.createElement('div');
+      wrap.className = 'stage-subtasks-wrap';
+      wrap.style.display = 'none';
+      wrap.innerHTML = renderColumnSubtasks(id, data);
+      taskEl.parentNode.insertBefore(wrap, taskEl.nextSibling);
+    });
+  }
+
+  function renderColumnSubtasks(parentId, data) {
+    let html = '<div class="stage-subtasks">';
+    data.subtasks.forEach((s, idx) => {
+      const hasSuggest = s.sunrunSuggest && !s.done;
+      html += '<div class="stage-subtask ' + (s.done ? 'done' : '') + '" data-parent="' + parentId + '" data-sub-idx="' + idx + '">';
+      html += '<div class="check" data-sub-check="' + idx + '"></div>';
+      html += '<span class="ttl">' + escapeHtml(s.title) + '</span>';
+      if (hasSuggest) {
+        html += '<span class="sunrun-suggest-mini">✨ Sunrun</span>';
+      }
+      html += '</div>';
+    });
+    html += '</div>';
+    return html;
+  }
+
+  function toggleStageSubtasks(taskId) {
+    const taskEl = document.querySelector('.stage-task[data-task-id="' + taskId + '"]');
+    if (!taskEl) return;
+    const wrap = taskEl.nextElementSibling;
+    if (!wrap || !wrap.classList.contains('stage-subtasks-wrap')) return;
+    const opening = wrap.style.display === 'none';
+    wrap.style.display = opening ? 'block' : 'none';
+    taskEl.classList.toggle('expanded', opening);
+  }
+
+  function toggleColumnSubtaskDone(parentId, idx) {
+    const data = TASK_DATA[parentId];
+    if (!data || !data.subtasks || !data.subtasks[idx]) return;
+    data.subtasks[idx].done = !data.subtasks[idx].done;
+    // Update visual
+    const subEl = document.querySelector('.stage-subtask[data-parent="' + parentId + '"][data-sub-idx="' + idx + '"]');
+    if (subEl) subEl.classList.toggle('done', data.subtasks[idx].done);
+    // Update count
+    const taskEl = document.querySelector('.stage-task[data-task-id="' + parentId + '"]');
+    const countEl = taskEl && taskEl.querySelector('.subtask-mini-count');
+    if (countEl) {
+      const done = data.subtasks.filter(s => s.done).length;
+      countEl.innerHTML = done + '/' + data.subtasks.length;
+    }
+    proto.set('SUBTASK·TOGGLE', 'Subtask toggled in column. (Edit in detail panel for full state — refs, sunrun-suggest, comments.)');
+  }
+
+  // Click a column subtask → open PARENT's detail in Info tab, scroll to that subtask, briefly highlight
+  function openParentForSubtask(parentId, subIdx) {
+    if (!TASK_DATA[parentId]) return;
+    proto.detailTab = 'info'; // open Info tab so subtask is visible
+    openTaskDetail(parentId);
+    setTimeout(() => {
+      const target = document.getElementById('dt-st-' + parentId + '-' + subIdx);
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        target.classList.add('highlight');
+        setTimeout(() => target.classList.remove('highlight'), 1900);
+      }
+    }, 200);
+    proto.set('SUBTASK·OPEN', 'Opened parent task with subtask in view. Subtasks live inside their parent — click the subtask\'s title in Info tab to drill into it as a standalone task.');
+  }
+
+  // Run after page load
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', injectSubtasksIntoColumns);
+  } else {
+    injectSubtasksIntoColumns();
+  }
 
   // === DRAG-AND-DROP between backlog rail and stage canvas ===
   let dragPayload = null;
