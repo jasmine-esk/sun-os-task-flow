@@ -183,11 +183,60 @@
     box-shadow: 0 0 0 1px var(--hairline-strong);
   }
 
-  /* Status bar uses dark accents */
+  /* Elements that hardcode bg: var(--ink) + color: white — need to invert properly in dark */
   :root[data-theme="dark"] .proto-status {
     background: var(--bg-elevated);
+    color: var(--ink);
     border: 1px solid var(--hairline);
     box-shadow: var(--shadow-card);
+  }
+  :root[data-theme="dark"] .proto-status .step-text strong {
+    color: var(--accent) !important;
+  }
+  :root[data-theme="dark"] .proto-status .state-tag {
+    background: var(--accent);
+    color: var(--bg);
+  }
+  :root[data-theme="dark"] .proto-toast {
+    background: var(--bg-elevated);
+    color: var(--ink);
+    border: 1px solid var(--hairline);
+    box-shadow: var(--shadow-modal);
+  }
+  :root[data-theme="dark"] .proto-toast.success {
+    background: rgba(130,181,130,0.18);
+    color: var(--good);
+    border-color: rgba(130,181,130,0.30);
+  }
+  :root[data-theme="dark"] .proto-toast.error {
+    background: rgba(221,123,107,0.18);
+    color: var(--danger);
+    border-color: rgba(221,123,107,0.30);
+  }
+  :root[data-theme="dark"] .stage-topbar .global-create,
+  :root[data-theme="dark"] .modal-btn.primary,
+  :root[data-theme="dark"] .pk-btn.primary,
+  :root[data-theme="dark"] .dt-chat-input .input-wrap .send,
+  :root[data-theme="dark"] .commit-bar .btn.primary {
+    background: var(--accent);
+    color: var(--bg);
+    border-color: var(--accent);
+  }
+  :root[data-theme="dark"] .stage-topbar .global-create:hover,
+  :root[data-theme="dark"] .modal-btn.primary:hover,
+  :root[data-theme="dark"] .pk-btn.primary:hover {
+    background: #E2B07F;
+    border-color: #E2B07F;
+  }
+  :root[data-theme="dark"] .stage-topbar .keyboard-hint {
+    background: rgba(14,13,11,0.40);
+    color: rgba(14,13,11,0.70);
+  }
+  /* Phase header in spec tab */
+  :root[data-theme="dark"] .phase-header {
+    background: var(--bg-elevated);
+    color: var(--ink);
+    border: 1px solid var(--hairline);
   }
 
   /* Save current view: dashed → use accent in dark */
@@ -970,7 +1019,7 @@
     position: sticky;
     top: 0;
     z-index: 50;
-    background: rgba(250,249,246,0.92);
+    background: var(--bg);
     backdrop-filter: saturate(120%) blur(8px);
     -webkit-backdrop-filter: saturate(120%) blur(8px);
     border-bottom: 1px solid var(--hairline);
@@ -978,6 +1027,9 @@
     display: flex;
     align-items: center;
     gap: 24px;
+  }
+  :root[data-theme="dark"] .page-tabs-bar {
+    background: rgba(14,13,11,0.85);
   }
   .page-tabs-bar .brand {
     font-size: 11px;
@@ -1029,7 +1081,7 @@
   }
   .page-tabs-bar .tab.active {
     background: var(--ink);
-    color: white;
+    color: var(--bg);
   }
   .page-tabs-bar .tab:hover:not(.active) {
     color: var(--ink);
