@@ -2663,6 +2663,47 @@
   .widget-sunrun .sr-row .num.warn { color: var(--warn); }
   .widget-sunrun .sr-row .num.run { color: var(--sunrun); }
 
+  /* === Drag-and-drop visuals === */
+  .dragging { opacity: 0.4 !important; }
+  .stage-column.drop-target-active {
+    background: rgba(180,122,63,0.05);
+    outline: 2px dashed var(--accent);
+    outline-offset: -3px;
+  }
+  .stage-column.drop-target-active::before {
+    content: '↓ Drop to add to ' attr(data-owner);
+    text-transform: capitalize;
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    background: var(--accent);
+    color: white;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 11.5px;
+    font-weight: 600;
+    pointer-events: none;
+    z-index: 4;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.15);
+  }
+  .stage-column { position: relative; }
+  .backlog-bucket.drop-target-active {
+    background: rgba(180,122,63,0.05);
+    outline: 2px dashed var(--accent);
+    outline-offset: -2px;
+    border-radius: 6px;
+  }
+  body.dnd-backlog-active .stage-column,
+  body.dnd-task-active .backlog-bucket {
+    transition: background 0.15s, outline 0.15s;
+  }
+  body.dnd-backlog-active .stage-column:not(.drop-target-active) {
+    background: rgba(180,122,63,0.015);
+  }
+  body.dnd-task-active .backlog-bucket:not(.drop-target-active) {
+    background: rgba(180,122,63,0.015);
+  }
+
   /* === Fixed-top in detail panel + Chat/Info tabs === */
   .proto-detail-panel { display: flex; flex-direction: column; }
   .proto-detail-fixed-top {
@@ -6863,6 +6904,135 @@ Last updated: May 2026 · Companion to <code>wayeez_task_component_spec.html</co
   // Close ref peek by clicking backdrop
   document.getElementById('ref-peek-overlay').addEventListener('click', (e) => {
     if (e.target.id === 'ref-peek-overlay') closeRefPeek();
+  });
+
+  // === DRAG-AND-DROP between backlog rail and stage canvas ===
+  let dragPayload = null;
+
+  document.addEventListener('dragstart', (e) => {
+    const backlogItem = e.target.closest && e.target.closest('.backlog-item');
+    const stageTask = e.target.closest && e.target.closest('.stage-task');
+    if (backlogItem) {
+      const ic = backlogItem.querySelector('.ic')?.textContent || '☐';
+      const ttl = backlogItem.querySelector('.ttl')?.textContent || '';
+      const pri = backlogItem.querySelector('.pri-mini')?.textContent || null;
+      dragPayload = { type: 'backlog', icon: ic, title: ttl, priority: pri, sourceEl: backlogItem };
+      backlogItem.classList.add('dragging');
+      document.body.classList.add('dnd-backlog-active');
+    } else if (stageTask && stageTask.getAttribute('data-task-id')) {
+      const taskId = stageTask.getAttribute('data-task-id');
+      dragPayload = { type: 'task', taskId, sourceEl: stageTask };
+      stageTask.classList.add('dragging');
+      document.body.classList.add('dnd-task-active');
+    } else {
+      return;
+    }
+    if (e.dataTransfer) {
+      e.dataTransfer.effectAllowed = 'move';
+      e.dataTransfer.setData('text/plain', dragPayload.type);
+    }
+  });
+
+  document.addEventListener('dragend', () => {
+    document.querySelectorAll('.dragging').forEach(el => el.classList.remove('dragging'));
+    document.querySelectorAll('.drop-target-active').forEach(el => el.classList.remove('drop-target-active'));
+    document.body.classList.remove('dnd-backlog-active', 'dnd-task-active');
+    dragPayload = null;
+  });
+
+  document.addEventListener('dragover', (e) => {
+    if (!dragPayload) return;
+    let target = null;
+    if (dragPayload.type === 'backlog') {
+      target = e.target.closest && e.target.closest('.stage-column');
+    } else if (dragPayload.type === 'task') {
+      target = e.target.closest && e.target.closest('.backlog-bucket');
+    }
+    if (target) {
+      e.preventDefault();
+      // Clear other targets, mark this one
+      document.querySelectorAll('.drop-target-active').forEach(el => {
+        if (el !== target) el.classList.remove('drop-target-active');
+      });
+      target.classList.add('drop-target-active');
+      if (e.dataTransfer) e.dataTransfer.dropEffect = 'move';
+    }
+  });
+
+  document.addEventListener('dragleave', (e) => {
+    const target = e.target.closest && e.target.closest('.drop-target-active');
+    if (!target) return;
+    if (e.relatedTarget && target.contains(e.relatedTarget)) return;
+    target.classList.remove('drop-target-active');
+  });
+
+  document.addEventListener('drop', (e) => {
+    if (!dragPayload) return;
+    e.preventDefault();
+
+    if (dragPayload.type === 'backlog') {
+      // Backlog → stage column
+      const col = e.target.closest && e.target.closest('.stage-column');
+      if (!col) return;
+      const owner = col.getAttribute('data-owner');
+      if (!owner) return;
+      const isSunrun = owner === 'sunrun';
+      addTaskToColumn(owner, dragPayload.title, dragPayload.icon, isSunrun, false);
+      // If priority was on the backlog item, transfer it to the new task
+      if (dragPayload.priority) {
+        const lastTask = document.querySelectorAll('#proto-tasks-' + owner + ' .stage-task.added');
+        const newTask = lastTask[lastTask.length - 1];
+        if (newTask) {
+          const tid = newTask.getAttribute('data-task-id');
+          if (tid && TASK_DATA[tid]) {
+            TASK_DATA[tid].priority = dragPayload.priority;
+            // Add visual pill in column
+            const pill = document.createElement('span');
+            pill.className = 'col-priority-pill ' + dragPayload.priority.toLowerCase();
+            pill.textContent = dragPayload.priority;
+            const ic = newTask.querySelector('.ic');
+            if (ic) ic.parentNode.insertBefore(pill, ic);
+          }
+        }
+      }
+      // Remove from source bucket + decrement count
+      if (dragPayload.sourceEl) {
+        const srcBucket = dragPayload.sourceEl.closest('.backlog-bucket');
+        dragPayload.sourceEl.remove();
+        if (srcBucket) {
+          const cnt = srcBucket.querySelector('.count');
+          if (cnt) cnt.textContent = Math.max(0, parseInt(cnt.textContent || '1') - 1);
+        }
+      }
+      proto.set('DRAG·DROP', 'Moved from backlog → <strong style="color:white;">' + (OWNER_NAMES[owner] || owner) + '</strong>\'s plan.');
+      showToast('+ Added to ' + (OWNER_NAMES[owner] || owner) + '\'s plan · <span class="toast-undo">Undo</span>', true);
+    } else if (dragPayload.type === 'task') {
+      // Stage → backlog bucket
+      const bucket = e.target.closest && e.target.closest('.backlog-bucket');
+      if (!bucket) return;
+      const taskId = dragPayload.taskId;
+      const data = TASK_DATA[taskId];
+      if (!data) return;
+      const items = bucket.querySelector('.backlog-items');
+      if (items) {
+        const newItem = document.createElement('div');
+        newItem.className = 'backlog-item';
+        newItem.draggable = true;
+        let inner = '';
+        if (data.priority) inner += '<span class="pri-mini ' + data.priority.toLowerCase() + '">' + data.priority + '</span>';
+        inner += '<span class="ic">' + (data.icon || '☐') + '</span>';
+        inner += '<span class="ttl">' + escapeHtml(data.title) + '</span>';
+        newItem.innerHTML = inner;
+        items.appendChild(newItem);
+      }
+      bucket.classList.add('open');
+      const cnt = bucket.querySelector('.count');
+      if (cnt) cnt.textContent = parseInt(cnt.textContent || '0') + 1;
+      if (dragPayload.sourceEl) dragPayload.sourceEl.remove();
+      const bucketName = bucket.querySelector('.name')?.textContent || 'Backlog';
+      proto.set('DRAG·DROP', 'Moved <strong style="color:white;">' + escapeHtml(data.title) + '</strong> → backlog (' + bucketName + ').');
+      showToast('Moved to backlog · ' + bucketName + ' · <span class="toast-undo">Undo</span>', true);
+    }
   });
 
   // Click outside detail panel to close
