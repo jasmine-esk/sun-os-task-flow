@@ -36,48 +36,198 @@
   }
 
   :root[data-theme="dark"] {
-    /* Dark theme — warm-undertone near-black, subtle gold accent */
-    --bg: #0E0D0B;
-    --bg-panel: #15130F;
-    --bg-soft: #1E1B15;
-    --bg-elevated: #1A1813;
-    --ink: #F0ECE2;
-    --ink-soft: #ADA89B;
+    /* Dark theme — OPEN-inspired: true black, warm orange accent, high contrast */
+    --bg: #07060A;
+    --bg-panel: #0E0D11;
+    --bg-soft: #16141A;
+    --bg-elevated: #131218;
+    --ink: #FAFAFA;
+    --ink-soft: #B8B5AC;
     --ink-faint: #6B675D;
-    --hairline: rgba(240,236,226,0.06);
-    --hairline-strong: rgba(240,236,226,0.12);
-    --accent: #D9A26B;
-    --accent-soft: rgba(217,162,107,0.14);
-    --accent-glow: rgba(217,162,107,0.30);
-    --code-bg: #1A1813;
+    --hairline: rgba(250,250,250,0.07);
+    --hairline-strong: rgba(250,250,250,0.14);
+    --accent: #ECA86A;
+    --accent-soft: rgba(236,168,106,0.14);
+    --accent-glow: rgba(236,168,106,0.35);
+    --code-bg: #16141A;
     --good: #82B582;
     --warn: #DD8E64;
     --danger: #DD7B6B;
-    --sunrun: #9F8FD5;
-    --sunrun-soft: rgba(159,143,213,0.16);
-    --owner-jazz: #6E5575;
-    --owner-wayeez: #4D6A82;
-    --owner-michael: #5C6B4A;
-    --owner-sunrun: #5F5290;
-    --shadow-card: 0 1px 3px rgba(0,0,0,0.40), 0 0 0 1px rgba(240,236,226,0.04);
-    --shadow-elevated: 0 8px 32px rgba(0,0,0,0.50), 0 0 0 1px rgba(240,236,226,0.05);
-    --shadow-modal: 0 32px 80px rgba(0,0,0,0.65), 0 0 0 1px rgba(240,236,226,0.06);
-    --glow-accent: 0 0 0 1px var(--accent-glow), 0 0 24px rgba(217,162,107,0.10);
+    --sunrun: #B0A0E0;
+    --sunrun-soft: rgba(176,160,224,0.16);
+    --owner-jazz: #7A5C82;
+    --owner-wayeez: #547298;
+    --owner-michael: #67784D;
+    --owner-sunrun: #6856A0;
+    --shadow-card: 0 1px 3px rgba(0,0,0,0.45), 0 0 0 1px rgba(250,250,250,0.04);
+    --shadow-elevated: 0 8px 32px rgba(0,0,0,0.55), 0 0 0 1px rgba(250,250,250,0.05);
+    --shadow-modal: 0 32px 80px rgba(0,0,0,0.75), 0 0 0 1px rgba(250,250,250,0.06);
+    --glow-accent: 0 0 0 1px var(--accent-glow), 0 0 32px rgba(236,168,106,0.18);
+    --glow-sunrun: 0 0 0 1px rgba(176,160,224,0.30), 0 0 32px rgba(176,160,224,0.14);
   }
 
-  /* Subtle warm radial accent for dark mode (top-left) */
+  /* Subtle warm radial accent for dark mode — OPEN-style ambient glow */
   :root[data-theme="dark"] body::before {
     content: '';
     position: fixed;
-    top: -200px;
-    left: -200px;
-    width: 600px;
-    height: 600px;
-    background: radial-gradient(circle, rgba(217,162,107,0.05) 0%, transparent 60%);
+    top: -250px;
+    left: -250px;
+    width: 800px;
+    height: 800px;
+    background: radial-gradient(circle, rgba(236,168,106,0.06) 0%, transparent 65%);
+    pointer-events: none;
+    z-index: 0;
+  }
+  :root[data-theme="dark"] body::after {
+    content: '';
+    position: fixed;
+    bottom: -200px;
+    right: -200px;
+    width: 700px;
+    height: 700px;
+    background: radial-gradient(circle, rgba(176,160,224,0.04) 0%, transparent 60%);
     pointer-events: none;
     z-index: 0;
   }
   :root[data-theme="dark"] body { position: relative; }
+  :root[data-theme="dark"] .layout, :root[data-theme="dark"] #prototype-view { position: relative; z-index: 1; }
+
+  /* OPEN-style: bigger, more confident serif headlines in dark */
+  :root[data-theme="dark"] .doc-header h1 { font-size: 48px; letter-spacing: -0.025em; font-weight: 400; }
+  :root[data-theme="dark"] h2 { font-size: 32px; letter-spacing: -0.02em; }
+  :root[data-theme="dark"] .proto-header h1 { font-size: 40px; letter-spacing: -0.025em; font-weight: 400; }
+  :root[data-theme="dark"] .stage-topbar .week-label {
+    font-size: 22px;
+    letter-spacing: -0.02em;
+    font-weight: 400;
+  }
+  :root[data-theme="dark"] .dt-title { font-size: 26px; letter-spacing: -0.02em; }
+  :root[data-theme="dark"] .transcripts-head .ttl,
+  :root[data-theme="dark"] .ref-peek-head .meta .ttl { font-size: 20px; }
+
+  /* OPEN-style outlined pill buttons (for secondary actions) */
+  :root[data-theme="dark"] .modal-btn,
+  :root[data-theme="dark"] .pk-btn,
+  :root[data-theme="dark"] .ref-btn {
+    border-radius: 999px;
+    padding-left: 14px;
+    padding-right: 14px;
+    border: 1px solid var(--hairline-strong);
+  }
+  :root[data-theme="dark"] .modal-btn:hover,
+  :root[data-theme="dark"] .pk-btn:hover {
+    border-color: var(--ink);
+    background: rgba(250,250,250,0.04);
+  }
+  :root[data-theme="dark"] .modal-btn.primary,
+  :root[data-theme="dark"] .pk-btn.primary {
+    border-radius: 999px;
+    border: 1px solid var(--accent);
+  }
+  :root[data-theme="dark"] .modal-btn.sunrun-btn {
+    border-radius: 999px;
+    border: 1px solid var(--sunrun);
+  }
+  :root[data-theme="dark"] .stage-topbar .global-create {
+    border-radius: 999px;
+    padding: 7px 16px;
+    border: 1px solid var(--accent);
+  }
+  :root[data-theme="dark"] .stage-topbar .topbar-btn {
+    border-radius: 999px;
+    border: 1px solid var(--hairline-strong);
+  }
+  :root[data-theme="dark"] .stage-topbar .topbar-btn:hover {
+    border-color: var(--ink);
+    background: rgba(250,250,250,0.04);
+  }
+
+  /* Glow on key cards — OPEN's signature warm-light effect */
+  :root[data-theme="dark"] .dt-clarify-card {
+    background:
+      radial-gradient(circle at top right, rgba(236,168,106,0.18) 0%, transparent 50%),
+      var(--bg-panel);
+    border-color: rgba(236,168,106,0.30);
+    box-shadow: var(--glow-accent);
+  }
+  :root[data-theme="dark"] .dt-rationale-section {
+    background:
+      radial-gradient(circle at top left, rgba(236,168,106,0.10) 0%, transparent 50%),
+      var(--bg-panel);
+    border-radius: 0 10px 10px 0;
+  }
+  :root[data-theme="dark"] .dt-status-card {
+    background:
+      radial-gradient(circle at bottom right, rgba(176,160,224,0.16) 0%, transparent 55%),
+      var(--bg-panel);
+    border-color: rgba(176,160,224,0.30);
+    box-shadow: var(--glow-sunrun);
+  }
+  :root[data-theme="dark"] .dt-sunrun-card {
+    background:
+      radial-gradient(circle at top right, rgba(176,160,224,0.14) 0%, transparent 50%),
+      var(--bg-panel);
+    border-color: rgba(176,160,224,0.25);
+  }
+  :root[data-theme="dark"] .pf-sunrun {
+    background:
+      radial-gradient(circle at top right, rgba(176,160,224,0.14) 0%, transparent 50%),
+      var(--bg-panel);
+    border-color: rgba(176,160,224,0.25);
+  }
+  :root[data-theme="dark"] .dt-auto-banner {
+    background:
+      radial-gradient(circle at top left, rgba(176,160,224,0.14) 0%, transparent 50%),
+      var(--bg-panel);
+    border-color: rgba(176,160,224,0.25);
+  }
+  :root[data-theme="dark"] .transcripts-summary {
+    background:
+      radial-gradient(circle at top left, rgba(236,168,106,0.10) 0%, transparent 60%),
+      var(--bg-panel);
+  }
+  :root[data-theme="dark"] .dt-chat-pin {
+    background:
+      radial-gradient(circle at bottom right, rgba(236,168,106,0.06) 0%, transparent 60%),
+      var(--bg-panel);
+  }
+  :root[data-theme="dark"] .backlog-mega-drop {
+    background:
+      radial-gradient(circle at center, rgba(236,168,106,0.18) 0%, rgba(236,168,106,0.08) 40%, transparent 80%);
+    border-color: var(--accent);
+    box-shadow: var(--glow-accent);
+  }
+
+  /* Stage column headers — bigger names like OPEN's category headers */
+  :root[data-theme="dark"] .stage-column .col-head .nm {
+    font-size: 11px;
+    letter-spacing: 0.10em;
+  }
+
+  /* Active-task subtle hover glow */
+  :root[data-theme="dark"] .stage-task:hover {
+    background: rgba(250,250,250,0.03);
+    box-shadow: 0 0 0 1px rgba(250,250,250,0.08);
+  }
+  :root[data-theme="dark"] .stage-task.review-task {
+    background: rgba(236,168,106,0.06);
+    border-left-color: var(--warn);
+  }
+  :root[data-theme="dark"] .stage-task.needs-clarification {
+    background: rgba(236,168,106,0.04);
+    border-left-color: var(--accent);
+  }
+  :root[data-theme="dark"] .stage-task.sunrun-task {
+    background: rgba(176,160,224,0.06);
+    border-left-color: var(--sunrun);
+  }
+
+  /* Brand mark in tabs bar — bigger letterspacing, more presence */
+  :root[data-theme="dark"] .page-tabs-bar .brand {
+    color: var(--accent);
+    letter-spacing: 0.20em;
+    font-size: 10.5px;
+  }
 
   /* === Dark-mode overrides for hardcoded white backgrounds === */
   :root[data-theme="dark"] .stage-add-row.editing,
