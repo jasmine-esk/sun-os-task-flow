@@ -1050,10 +1050,248 @@
     font-weight: 600;
     margin-top: 4px;
   }
+  /* Lightweight summary across all transcripts */
+  .transcripts-summary {
+    padding: 16px 22px 14px;
+    border-bottom: 1px solid var(--hairline);
+    background: linear-gradient(135deg, rgba(180,122,63,0.04) 0%, transparent 100%);
+  }
+  .transcripts-summary .ts-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 10px;
+  }
+  .transcripts-summary .ts-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: var(--accent-soft);
+    color: var(--accent);
+    padding: 3px 9px;
+    border-radius: 4px;
+    font-size: 9.5px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+  .transcripts-summary .ts-period {
+    font-size: 10.5px;
+    color: var(--ink-faint);
+    font-family: 'SF Mono', monospace;
+    font-weight: 500;
+  }
+  .transcripts-summary .ts-body {
+    font-size: 12.5px;
+    line-height: 1.55;
+    color: var(--ink);
+  }
+  .transcripts-summary .ts-body strong { color: var(--ink); font-weight: 600; }
+  .transcripts-summary .ts-decisions-link {
+    margin-top: 12px;
+    background: white;
+    border: 1px solid var(--hairline);
+    color: var(--accent);
+    font-family: inherit;
+    font-size: 11.5px;
+    padding: 6px 11px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 600;
+  }
+  .transcripts-summary .ts-decisions-link:hover {
+    background: var(--accent-soft);
+    border-color: var(--accent);
+  }
+
   .transcripts-list {
     flex: 1;
     overflow-y: auto;
     padding: 12px 14px 18px;
+  }
+
+  /* === Decisions tree === */
+  .decisions-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(20,18,14,0.45);
+    display: none;
+    align-items: flex-start;
+    justify-content: center;
+    z-index: 130;
+    opacity: 0;
+    transition: opacity 200ms;
+    padding: 60px 20px;
+  }
+  .decisions-overlay.active { display: flex; opacity: 1; }
+  .decisions-modal {
+    background: white;
+    border-radius: 12px;
+    width: 760px;
+    max-width: 96vw;
+    max-height: calc(100vh - 120px);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.30);
+    transform: scale(0.96);
+    transition: transform 200ms ease-out;
+  }
+  .decisions-overlay.active .decisions-modal { transform: scale(1); }
+
+  .dec-week {
+    padding: 14px 22px 4px;
+    background: var(--bg);
+    border-bottom: 1px solid var(--hairline);
+    position: sticky;
+    top: 0;
+    z-index: 2;
+  }
+  .dec-week .week-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 10px;
+  }
+  .dec-week .week-name {
+    font-family: 'Tiempos Headline', Georgia, serif;
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--ink);
+  }
+  .dec-week .week-meta {
+    font-size: 10.5px;
+    color: var(--ink-faint);
+    font-family: 'SF Mono', monospace;
+  }
+  .dec-list {
+    padding: 4px 22px 18px;
+  }
+  .dec-item {
+    display: flex;
+    gap: 14px;
+    padding: 14px 0 14px;
+    border-bottom: 1px solid rgba(0,0,0,0.04);
+    position: relative;
+  }
+  .dec-item:last-child { border-bottom: none; }
+  .dec-item .timeline-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: var(--accent);
+    margin-top: 5px;
+    flex-shrink: 0;
+    position: relative;
+    z-index: 1;
+  }
+  .dec-item.superseded .timeline-dot { background: var(--ink-faint); }
+  .dec-item.pending .timeline-dot { background: var(--warn); }
+  .dec-item .dec-content { flex: 1; min-width: 0; }
+  .dec-item .dec-tags {
+    display: flex;
+    gap: 5px;
+    margin-bottom: 5px;
+    flex-wrap: wrap;
+  }
+  .dec-item .dec-tag {
+    font-size: 9.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-weight: 700;
+    padding: 2px 7px;
+    border-radius: 3px;
+    font-family: 'SF Mono', monospace;
+  }
+  .dec-item .dec-tag.theme {
+    background: var(--accent-soft);
+    color: var(--accent);
+  }
+  .dec-item .dec-tag.status-active {
+    background: rgba(90,143,90,0.12);
+    color: var(--good);
+  }
+  .dec-item .dec-tag.status-superseded {
+    background: var(--bg-soft);
+    color: var(--ink-faint);
+    text-decoration: line-through;
+  }
+  .dec-item .dec-tag.status-pending {
+    background: rgba(194,106,63,0.12);
+    color: var(--warn);
+  }
+  .dec-item .dec-text {
+    font-size: 13px;
+    color: var(--ink);
+    line-height: 1.45;
+    margin-bottom: 5px;
+    font-weight: 500;
+  }
+  .dec-item.superseded .dec-text {
+    color: var(--ink-faint);
+    text-decoration: line-through;
+  }
+  .dec-item .dec-source {
+    font-size: 11px;
+    color: var(--ink-faint);
+    font-family: 'SF Mono', monospace;
+    margin-bottom: 6px;
+  }
+  .dec-item .dec-source .who { color: var(--ink-soft); font-weight: 600; }
+  .dec-item .dec-effects {
+    background: var(--bg);
+    border-radius: 5px;
+    padding: 6px 10px;
+    font-size: 11px;
+    color: var(--ink-soft);
+    margin-top: 6px;
+  }
+  .dec-item .dec-effects strong { color: var(--ink); font-weight: 600; }
+  .dec-item .dec-effects-link {
+    color: var(--accent);
+    cursor: pointer;
+    text-decoration: underline dotted;
+  }
+
+  .dec-themes-bar {
+    padding: 10px 22px;
+    border-bottom: 1px solid var(--hairline);
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    background: var(--bg-panel);
+  }
+  .dec-theme-chip {
+    background: var(--bg-soft);
+    border: 1px solid transparent;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 11px;
+    color: var(--ink-soft);
+    cursor: pointer;
+    font-family: inherit;
+  }
+  .dec-theme-chip:hover {
+    background: var(--bg);
+    border-color: var(--hairline);
+    color: var(--ink);
+  }
+  .dec-theme-chip.active {
+    background: var(--accent);
+    color: white;
+    border-color: var(--accent);
+    font-weight: 600;
+  }
+  .dec-theme-chip .ct {
+    margin-left: 4px;
+    font-size: 9.5px;
+    font-family: 'SF Mono', monospace;
+    opacity: 0.7;
+  }
+
+  .decisions-body {
+    flex: 1;
+    overflow-y: auto;
   }
   .mtg-card {
     background: white;
@@ -2643,6 +2881,127 @@
     color: var(--accent);
   }
 
+  /* Saved views (top of left rail) */
+  .saved-views { margin-bottom: 4px; }
+  .saved-view {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 9px;
+    border-radius: 5px;
+    font-size: 12px;
+    color: var(--ink);
+    cursor: pointer;
+    margin-bottom: 1px;
+    position: relative;
+    user-select: none;
+  }
+  .saved-view:hover { background: var(--bg-soft); }
+  .saved-view.active {
+    background: var(--accent-soft);
+    color: var(--accent);
+    font-weight: 600;
+  }
+  .saved-view .ic { font-size: 13px; flex-shrink: 0; }
+  .saved-view .name { flex: 1; line-height: 1.2; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .saved-view .ct {
+    font-size: 10px;
+    color: var(--ink-faint);
+    font-family: 'SF Mono', monospace;
+    background: var(--bg-soft);
+    padding: 1px 6px;
+    border-radius: 3px;
+    font-weight: 600;
+    flex-shrink: 0;
+  }
+  .saved-view.active .ct {
+    background: var(--accent);
+    color: white;
+  }
+  .saved-view.scenario {
+    background: linear-gradient(90deg, rgba(111,95,168,0.06) 0%, transparent 100%);
+    border-left: 2px solid var(--sunrun);
+    padding-left: 7px;
+  }
+  .saved-view.scenario.active {
+    background: linear-gradient(90deg, rgba(111,95,168,0.15) 0%, var(--sunrun-soft) 100%);
+    color: var(--sunrun);
+  }
+  .saved-view.scenario.active .ct {
+    background: var(--sunrun);
+    color: white;
+  }
+  .saved-view .scenario-badge {
+    font-size: 8px;
+    background: var(--sunrun);
+    color: white;
+    padding: 1px 4px;
+    border-radius: 2px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    flex-shrink: 0;
+  }
+  .save-view-btn {
+    width: 100%;
+    background: none;
+    border: 1px dashed var(--hairline);
+    border-radius: 5px;
+    padding: 7px 10px;
+    font-size: 11px;
+    color: var(--ink-faint);
+    cursor: pointer;
+    font-family: inherit;
+    margin: 6px 0 12px;
+    transition: all 0.12s;
+    text-align: center;
+  }
+  .save-view-btn:hover {
+    color: var(--accent);
+    border-color: var(--accent);
+    background: var(--accent-soft);
+  }
+
+  /* Active filter banner at top of stage */
+  .stage-filter-banner {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 14px;
+    background: var(--accent-soft);
+    color: var(--accent);
+    font-size: 12px;
+    border-bottom: 1px solid var(--hairline);
+  }
+  .stage-filter-banner.scenario {
+    background: var(--sunrun-soft);
+    color: var(--sunrun);
+  }
+  .stage-filter-banner .label {
+    font-size: 9.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-weight: 700;
+  }
+  .stage-filter-banner .name { font-weight: 600; flex: 1; }
+  .stage-filter-banner .clear {
+    background: none;
+    border: 1px solid currentColor;
+    color: inherit;
+    font-family: inherit;
+    font-size: 11px;
+    cursor: pointer;
+    padding: 3px 9px;
+    border-radius: 4px;
+    font-weight: 500;
+  }
+  .stage-filter-banner .clear:hover {
+    background: rgba(180,122,63,0.15);
+  }
+  .stage-filter-banner.scenario .clear:hover {
+    background: rgba(111,95,168,0.15);
+  }
+
   /* Backlog buckets */
   .backlog-bucket { margin-bottom: 2px; }
   .backlog-bucket-head {
@@ -2953,6 +3312,69 @@
   }
   .widget-sunrun .sr-row .num.warn { color: var(--warn); }
   .widget-sunrun .sr-row .num.run { color: var(--sunrun); }
+
+  /* Scenario-ghost rows in columns + milestone rows */
+  .stage-task.scenario-ghost {
+    background: rgba(111,95,168,0.05);
+    border: 1px dashed rgba(111,95,168,0.4);
+    cursor: default;
+  }
+  .stage-task.scenario-ghost:hover { background: rgba(111,95,168,0.10); }
+  .stage-task.scenario-ghost.milestone {
+    background: rgba(111,95,168,0.12);
+    border: 1px solid var(--sunrun);
+    font-weight: 600;
+  }
+  .stage-task.scenario-ghost .ghost-meta {
+    margin-left: auto;
+    font-size: 9.5px;
+    color: var(--sunrun);
+    font-family: 'SF Mono', monospace;
+    font-style: italic;
+    flex-shrink: 0;
+  }
+
+  /* View detail panel — task list rows */
+  .view-task-list { display: flex; flex-direction: column; gap: 3px; }
+  .view-task-row {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 8px 10px;
+    border-radius: 6px;
+    background: var(--bg);
+    font-size: 12.5px;
+    line-height: 1.3;
+    cursor: pointer;
+    transition: background 0.12s;
+  }
+  .view-task-row:hover { background: var(--bg-soft); }
+  .view-task-row.ghosted {
+    background: rgba(111,95,168,0.05);
+    border: 1px dashed rgba(111,95,168,0.4);
+    cursor: default;
+  }
+  .view-task-row.ghosted:hover { background: rgba(111,95,168,0.10); }
+  .view-task-row.milestone {
+    background: rgba(111,95,168,0.12);
+    border: 1px solid var(--sunrun);
+    font-weight: 600;
+  }
+  .view-task-row.done .ttl { text-decoration: line-through; color: var(--ink-faint); }
+  .view-task-row .check {
+    width: 13px; height: 13px;
+    border: 1.5px solid var(--ink-faint);
+    border-radius: 3px;
+    flex-shrink: 0;
+  }
+  .view-task-row .ic { font-size: 12px; flex-shrink: 0; }
+  .view-task-row .ttl { flex: 1; min-width: 0; color: var(--ink); }
+  .view-task-row .meta {
+    font-size: 10.5px;
+    color: var(--ink-faint);
+    font-family: 'SF Mono', monospace;
+    flex-shrink: 0;
+  }
 
   /* === Subtasks visible inline in columns === */
   .stage-task .expand-chevron {
@@ -5280,12 +5702,49 @@ Last updated: May 2026 · Companion to <code>wayeez_task_component_spec.html</co
 <div class="stage" id="proto-stage">
   <div class="stage-topbar">
     <span class="week-label">Week of May 4</span>
-    <button class="topbar-btn" id="proto-transcripts-btn" title="All Sunspoke transcripts">🎙 Transcripts <span class="ct">12</span></button>
+    <button class="topbar-btn" id="proto-transcripts-btn" title="All Sunspoke transcripts">🎙 Transcripts <span class="ct">6</span></button>
+    <button class="topbar-btn" id="proto-decisions-btn" title="Decisions tree — what got settled and when">🌳 Decisions <span class="ct">9</span></button>
     <button class="global-create" id="proto-global-create">+ Create task <span class="keyboard-hint">⌘N</span></button>
   </div>
   <div class="stage-3panel">
     <!-- LEFT RAIL: Backlog library -->
     <aside class="stage-rail-left">
+      <h6>Views <button class="add-link" title="Save current view" onclick="saveCurrentView()">+</button></h6>
+      <div class="saved-views" id="saved-views-list">
+        <div class="saved-view" data-view-id="p1-week" onclick="applyView('p1-week', '🎯 P1 — this week', 'normal')">
+          <span class="ic">🎯</span>
+          <span class="name">P1 — this week</span>
+          <span class="ct">3</span>
+        </div>
+        <div class="saved-view" data-view-id="sunrun-all" onclick="applyView('sunrun-all', '✨ All Sunrun activity', 'normal')">
+          <span class="ic">✨</span>
+          <span class="name">All Sunrun activity</span>
+          <span class="ct">4</span>
+        </div>
+        <div class="saved-view" data-view-id="aither" onclick="applyView('aither', '🟠 Aither tasks', 'normal')">
+          <span class="ic">🟠</span>
+          <span class="name">Aither tasks</span>
+          <span class="ct">8</span>
+        </div>
+        <div class="saved-view scenario" data-view-id="suncraft-launch" onclick="applyView('suncraft-launch', '🚀 Suncraft launch', 'scenario')">
+          <span class="ic">🚀</span>
+          <span class="name">Suncraft launch</span>
+          <span class="scenario-badge">scenario</span>
+          <span class="ct">12</span>
+        </div>
+        <div class="saved-view" data-view-id="awaiting-review" onclick="applyView('awaiting-review', '👀 Awaiting my review', 'normal')">
+          <span class="ic">👀</span>
+          <span class="name">Awaiting my review</span>
+          <span class="ct">1</span>
+        </div>
+        <div class="saved-view" data-view-id="wayeez-only" onclick="applyView('wayeez-only', 'Wayeez\\'s plan', 'normal')">
+          <span class="ic">👤</span>
+          <span class="name">Wayeez's plan</span>
+          <span class="ct">4</span>
+        </div>
+      </div>
+      <button class="save-view-btn" onclick="saveCurrentView()">+ Save current view</button>
+
       <h6>Backlog <button class="add-link" title="Add">+</button></h6>
       <input type="text" class="backlog-search" placeholder="Search backlog…" />
 
@@ -5595,6 +6054,13 @@ Last updated: May 2026 · Companion to <code>wayeez_task_component_spec.html</co
 <!-- Transcripts modal (Sunspoke captures) -->
 <div class="transcripts-overlay" id="transcripts-overlay">
   <div class="transcripts-modal" id="transcripts-modal">
+    <!-- contents injected by JS -->
+  </div>
+</div>
+
+<!-- Decisions modal (decisions tree / week-by-week settled questions) -->
+<div class="decisions-overlay" id="decisions-overlay">
+  <div class="decisions-modal" id="decisions-modal">
     <!-- contents injected by JS -->
   </div>
 </div>
@@ -7516,6 +7982,12 @@ Last updated: May 2026 · Companion to <code>wayeez_task_component_spec.html</co
     if (e.target.id === 'transcripts-overlay') closeTranscriptsModal();
   });
 
+  // Decisions button
+  document.getElementById('proto-decisions-btn').addEventListener('click', openDecisionsModal);
+  document.getElementById('decisions-overlay').addEventListener('click', (e) => {
+    if (e.target.id === 'decisions-overlay') closeDecisionsModal();
+  });
+
   // Manual: inline + Add task in each column
   document.querySelectorAll('.stage-add-row').forEach(row => {
     row.addEventListener('click', (e) => {
@@ -7523,6 +7995,53 @@ Last updated: May 2026 · Companion to <code>wayeez_task_component_spec.html</co
       if (proto.flow) proto.reset();
       triggerInlineAdd(row.dataset.owner, null, false);
     });
+  });
+
+  // Click backlog items → open in detail panel (synthesize task data on the fly if needed)
+  document.querySelector('.stage-rail-left').addEventListener('click', (e) => {
+    const item = e.target.closest && e.target.closest('.backlog-item');
+    if (!item) return;
+    // Don't fire if clicking a control inside (none currently, but guard)
+    if (e.target.tagName === 'BUTTON') return;
+    let id = item.getAttribute('data-task-id');
+    if (!id) {
+      // Synthesize a minimal task-data entry for this backlog item
+      id = 'backlog-' + Array.from(item.parentNode.children).indexOf(item) + '-' + (item.querySelector('.ttl')?.textContent || '').slice(0, 20).replace(/\s+/g, '-').toLowerCase();
+      if (!TASK_DATA[id]) {
+        const ic = item.querySelector('.ic')?.textContent || '☐';
+        const ttl = item.querySelector('.ttl')?.textContent || 'Untitled';
+        const pri = item.querySelector('.pri-mini')?.textContent || null;
+        const bucket = item.closest('.backlog-bucket')?.querySelector('.name')?.textContent || 'Backlog';
+        const sourceMap = {
+          '💬': { type: 'slack', label: 'Slack thread · captured by Sunpull' },
+          '🎙': { type: 'meeting', label: 'Meeting transcript · Sunspoke' },
+          '✉': { type: 'email', label: 'Email thread · captured' },
+          '💾': { type: 'manual', label: 'Sunpull save' }
+        };
+        TASK_DATA[id] = {
+          title: ttl,
+          icon: ic,
+          owner: 'jazz',
+          status: 'todo',
+          statusLabel: 'In ' + bucket,
+          priority: pri,
+          source: sourceMap[ic] || { type: 'manual', label: bucket + ' bucket' },
+          due: '—',
+          missionType: 'Operational',
+          estTime: '—',
+          bucket: bucket,
+          rationale: '',
+          desc: '',
+          refs: [],
+          subtasks: [],
+          activity: [{ who: 'Backlog', what: 'item · pending review', when: 'unknown' }],
+          comments: [],
+          messages: []
+        };
+      }
+      item.setAttribute('data-task-id', id);
+    }
+    openTaskDetail(id);
   });
 
   // Click any task → open detail panel (delegated for new tasks)
@@ -7573,7 +8092,9 @@ Last updated: May 2026 · Companion to <code>wayeez_task_component_spec.html</co
       openFullModal(null, false);
     }
     if (e.key === 'Escape') {
-      if (document.getElementById('transcripts-overlay').classList.contains('active')) {
+      if (document.getElementById('decisions-overlay').classList.contains('active')) {
+        closeDecisionsModal();
+      } else if (document.getElementById('transcripts-overlay').classList.contains('active')) {
         closeTranscriptsModal();
       } else if (document.getElementById('ref-peek-overlay').classList.contains('active')) {
         closeRefPeek();
@@ -7589,6 +8110,380 @@ Last updated: May 2026 · Companion to <code>wayeez_task_component_spec.html</co
   document.getElementById('ref-peek-overlay').addEventListener('click', (e) => {
     if (e.target.id === 'ref-peek-overlay') closeRefPeek();
   });
+
+  // === Saved views ===
+  const VIEW_DATA = {
+    'p1-week': {
+      name: '🎯 P1 — this week',
+      kind: 'normal',
+      desc: 'All P1-priority tasks scheduled this week, across owners.',
+      tasks: ['aether-sunset', 'mtg-suncraft-launch'],
+      extraTasks: [
+        { ic: '🎯', title: 'Lock investor close date', meta: 'Jazz · due Mon May 5' }
+      ]
+    },
+    'sunrun-all': {
+      name: '✨ All Sunrun activity',
+      kind: 'normal',
+      desc: 'Every Sunrun mission — running, awaiting review, completed this week.',
+      tasks: ['aither-pipeline', 'review-aither-batch'],
+      extraTasks: [
+        { ic: '⚡', title: 'Weekly Aither metrics digest', meta: 'Sunrun · ran Mon · auto' },
+        { ic: '⚡', title: 'Investor pipeline triage', meta: 'Sunrun · queued · ~$0.30' }
+      ]
+    },
+    'aither': {
+      name: '🟠 Aither tasks',
+      kind: 'normal',
+      desc: 'Everything tagged or referencing Aither — across owners and statuses.',
+      tasks: ['aether-sunset', 'slack-aither-followup', 'review-aither-batch', 'aither-pipeline'],
+      extraTasks: [
+        { ic: '✉', title: 'Aether sunset email batch 3', meta: 'Jazz · queued for May 8' },
+        { ic: '📋', title: 'Aether handoff doc — partial', meta: 'Drafts · 60% complete' },
+        { ic: '✉', title: 'Aether sunset email batch 1', meta: 'Done · Apr 23', done: true },
+        { ic: '📞', title: 'Investor call — Karim L.', meta: 'Done · Apr 26', done: true }
+      ]
+    },
+    'suncraft-launch': {
+      name: '🚀 Suncraft launch',
+      kind: 'scenario',
+      desc: 'Sunline-simulated task tree for shipping Suncraft on May 19. Ghosted = not yet committed to plan. Commit to merge into your live plan.',
+      scenarioGoal: 'Ship Suncraft to public on May 19, 2026',
+      tasks: [],  // Scenario uses extraTasks only — these are simulated
+      extraTasks: [
+        { ic: '🎯', title: 'Lock pricing tiers (final)', meta: 'Jazz · May 1', ghosted: true },
+        { ic: '✉', title: 'Migration email batch 2', meta: 'Jazz · May 2', ghosted: true },
+        { ic: '✉', title: 'Migration email batch 3', meta: 'Jazz · May 8', ghosted: true },
+        { ic: '🎨', title: 'Suncraft homepage — final pass', meta: 'Wayeez · May 5', ghosted: true },
+        { ic: '🎨', title: 'Pricing page redesign', meta: 'Wayeez · May 6', ghosted: true },
+        { ic: '⚡', title: 'Compile case studies from past clients', meta: 'Sunrun · May 7 · ~$0.40', ghosted: true },
+        { ic: '🤝', title: 'Soft-launch with 5 friendly clients', meta: 'Jazz + Wayeez · May 12', ghosted: true },
+        { ic: '📰', title: 'Press release prep', meta: 'Wayeez · May 14', ghosted: true },
+        { ic: '⚡', title: 'Outreach to 50 ICP-match founders', meta: 'Sunrun · May 15 · ~$1.20', ghosted: true },
+        { ic: '🔍', title: 'Final QA sweep', meta: 'Jazz · May 17', ghosted: true },
+        { ic: '🚀', title: 'PUBLIC LAUNCH', meta: 'Jazz + Wayeez · May 19', ghosted: true, milestone: true },
+        { ic: '📊', title: 'Post-launch retro (1 week after)', meta: 'All · May 26', ghosted: true }
+      ]
+    },
+    'awaiting-review': {
+      name: '👀 Awaiting my review',
+      kind: 'normal',
+      desc: 'Tasks where Sunrun (or another teammate) is blocked on your input.',
+      tasks: ['review-aither-batch'],
+      extraTasks: []
+    },
+    'wayeez-only': {
+      name: "👤 Wayeez's plan",
+      kind: 'normal',
+      desc: "Everything assigned to Wayeez this week.",
+      tasks: ['empty-states', 'task-component'],
+      extraTasks: [
+        { ic: '🎨', title: 'Sunline mobile mockups', meta: 'Wayeez · queued' },
+        { ic: '📐', title: 'Component library audit', meta: 'Wayeez · this month' }
+      ]
+    }
+  };
+
+  function applyView(viewId, viewName, kind) {
+    document.querySelectorAll('.saved-view').forEach(v => {
+      v.classList.toggle('active', v.getAttribute('data-view-id') === viewId);
+    });
+    let banner = document.getElementById('stage-filter-banner');
+    if (!banner) {
+      banner = document.createElement('div');
+      banner.id = 'stage-filter-banner';
+      banner.className = 'stage-filter-banner';
+      const stage3panel = document.querySelector('.stage-3panel');
+      if (stage3panel) stage3panel.parentNode.insertBefore(banner, stage3panel);
+    }
+    banner.classList.toggle('scenario', kind === 'scenario');
+    const labelText = kind === 'scenario' ? 'Scenario' : 'Filtered';
+    banner.innerHTML = '<span class="label">' + labelText + '</span><span class="name">' + viewName + '</span><button class="clear" onclick="clearView()">✕ Clear</button>';
+    // Filter or replace canvas
+    const view = VIEW_DATA[viewId];
+    if (view) {
+      if (kind === 'scenario') {
+        applyScenarioToCanvas(view);
+      } else {
+        applyFilterToCanvas(view);
+      }
+    }
+    proto.set(kind === 'scenario' ? 'SCENARIO' : 'VIEW',
+      kind === 'scenario'
+        ? 'Scenario active: <strong style="color:white;">' + viewName + '</strong>. Live tasks hidden · simulated task tree shown ghosted in columns. Side panel shows commit option.'
+        : 'View applied: <strong style="color:white;">' + viewName + '</strong>. Columns filtered to show only tasks in this view.',
+      kind === 'scenario' ? 'sunrun' : null);
+  }
+
+  function applyFilterToCanvas(view) {
+    const allowedIds = new Set([...(view.tasks || [])]);
+    document.querySelectorAll('.scenario-ghost').forEach(g => g.remove());
+    document.querySelectorAll('.stage-task[data-task-id]').forEach(taskEl => {
+      const id = taskEl.getAttribute('data-task-id');
+      const matches = allowedIds.has(id);
+      taskEl.style.display = matches ? '' : 'none';
+      const wrap = taskEl.nextElementSibling;
+      if (wrap && wrap.classList.contains('stage-subtasks-wrap')) {
+        wrap.style.display = matches && taskEl.classList.contains('expanded') ? 'block' : 'none';
+      }
+    });
+    // Add extraTasks (mock items in view that aren't real tasks) as ghosted preview rows
+    const extras = view.extraTasks || [];
+    extras.forEach(t => {
+      const meta = (t.meta || '').toLowerCase();
+      let owner = 'jazz';
+      if (meta.includes('wayeez') && !meta.includes('jazz')) owner = 'wayeez';
+      else if (meta.includes('sunrun')) owner = 'sunrun';
+      const list = document.getElementById('proto-tasks-' + owner);
+      if (!list) return;
+      const ghost = document.createElement('div');
+      ghost.className = 'stage-task scenario-ghost';
+      if (owner === 'sunrun') ghost.classList.add('sunrun-task');
+      let inner = '<div class="check"></div>';
+      inner += '<div class="ic">' + (t.ic || '☐') + '</div>';
+      inner += '<span class="ttl">' + escapeHtml(t.title) + '</span>';
+      inner += '<span class="ghost-meta">' + escapeHtml(t.meta || '') + '</span>';
+      ghost.innerHTML = inner;
+      list.appendChild(ghost);
+    });
+    updateColumnMetaForFilter();
+  }
+
+  function applyScenarioToCanvas(view) {
+    document.querySelectorAll('.scenario-ghost').forEach(g => g.remove());
+    document.querySelectorAll('.stage-task[data-task-id]').forEach(taskEl => {
+      taskEl.style.display = 'none';
+      const wrap = taskEl.nextElementSibling;
+      if (wrap && wrap.classList.contains('stage-subtasks-wrap')) wrap.style.display = 'none';
+    });
+    const extras = view.extraTasks || [];
+    extras.forEach(t => {
+      const meta = (t.meta || '').toLowerCase();
+      let owner = 'jazz';
+      if (meta.includes('wayeez') && !meta.includes('jazz')) owner = 'wayeez';
+      else if (meta.includes('sunrun')) owner = 'sunrun';
+      else if (meta.includes('all')) owner = 'jazz';
+      const list = document.getElementById('proto-tasks-' + owner);
+      if (!list) return;
+      const ghost = document.createElement('div');
+      ghost.className = 'stage-task scenario-ghost';
+      if (t.milestone) ghost.classList.add('milestone');
+      if (owner === 'sunrun') ghost.classList.add('sunrun-task');
+      let inner = '<div class="check"></div>';
+      inner += '<div class="ic">' + (t.ic || '☐') + '</div>';
+      inner += '<span class="ttl">' + escapeHtml(t.title) + '</span>';
+      inner += '<span class="ghost-meta">' + escapeHtml(t.meta || '') + '</span>';
+      ghost.innerHTML = inner;
+      list.appendChild(ghost);
+    });
+    updateColumnMetaForFilter('scenario');
+  }
+
+  function updateColumnMetaForFilter(mode) {
+    ['jazz', 'wayeez', 'sunrun'].forEach(owner => {
+      const list = document.getElementById('proto-tasks-' + owner);
+      if (!list) return;
+      const visible = list.querySelectorAll('.stage-task:not([style*="display: none"])');
+      const meta = document.getElementById('proto-meta-' + owner);
+      if (meta) {
+        const noun = owner === 'sunrun' ? (visible.length === 1 ? 'mission' : 'missions') : (visible.length === 1 ? 'task' : 'tasks');
+        meta.textContent = visible.length + ' ' + noun + (mode === 'scenario' ? ' (scenario)' : ' in view');
+      }
+    });
+  }
+
+  function resetColumnMeta() {
+    const counts = { jazz: '3 tasks · 8h', wayeez: '2 tasks · 6h', sunrun: '1 mission · running' };
+    // Recount actual tasks in the columns since we may have added some via drag/drop
+    ['jazz', 'wayeez', 'sunrun'].forEach(owner => {
+      const list = document.getElementById('proto-tasks-' + owner);
+      if (!list) return;
+      const all = list.querySelectorAll('.stage-task[data-task-id]');
+      const meta = document.getElementById('proto-meta-' + owner);
+      if (meta) {
+        const noun = owner === 'sunrun' ? (all.length === 1 ? 'mission' : 'missions') : (all.length === 1 ? 'task' : 'tasks');
+        const suffix = owner === 'sunrun' ? ' · running' : '';
+        meta.textContent = all.length + ' ' + noun + suffix;
+      }
+    });
+  }
+
+  function openViewDetail(viewId) {
+    const view = VIEW_DATA[viewId];
+    if (!view) return;
+    proto.detailStack = []; // distinct from task stack
+    renderViewDetail(viewId, view);
+    document.getElementById('proto-detail-panel').classList.add('open');
+    document.getElementById('proto-detail-panel').setAttribute('aria-hidden', 'false');
+  }
+
+  function renderViewDetail(viewId, view) {
+    const isScenario = view.kind === 'scenario';
+    let html = '';
+
+    // Header
+    html += '<div class="proto-detail-head">';
+    html += '<div class="av" style="background: ' + (isScenario ? 'var(--sunrun)' : 'var(--accent)') + '; color: white;">' + (isScenario ? '🚀' : '⊞') + '</div>';
+    html += '<div class="breadcrumb">' + (isScenario ? 'Scenario · simulated' : 'Saved view · live filter') + '</div>';
+    html += '<button class="x" onclick="closeTaskDetail()">✕</button>';
+    html += '</div>';
+
+    // Body
+    html += '<div class="proto-detail-body">';
+    html += '<div style="margin-bottom: 16px;">';
+    html += '<h2 class="dt-title" style="margin:0 0 6px;">' + escapeHtml(view.name) + '</h2>';
+    if (isScenario) {
+      html += '<div style="display: inline-flex; align-items: center; gap: 6px; background: var(--sunrun); color: white; padding: 3px 9px; border-radius: 4px; font-size: 9.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 8px;">✨ Scenario · not committed</div>';
+    }
+    html += '<div style="font-size: 12.5px; color: var(--ink-soft); line-height: 1.5;">' + escapeHtml(view.desc) + '</div>';
+    if (view.scenarioGoal) {
+      html += '<div style="margin-top: 10px; padding: 9px 12px; background: var(--sunrun-soft); border-left: 3px solid var(--sunrun); border-radius: 0 6px 6px 0; font-size: 12px;">';
+      html += '<div style="font-size: 9.5px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--sunrun); font-weight: 700; margin-bottom: 4px;">Goal</div>';
+      html += '<div style="color: var(--ink); font-weight: 500;">' + escapeHtml(view.scenarioGoal) + '</div>';
+      html += '</div>';
+    }
+    html += '</div>';
+
+    // Tasks list
+    const realTasks = (view.tasks || []).map(id => ({ taskId: id, data: TASK_DATA[id] })).filter(t => t.data);
+    const extraTasks = view.extraTasks || [];
+    const total = realTasks.length + extraTasks.length;
+
+    html += '<h5 style="font-size: 9.5px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--ink-faint); font-weight: 700; margin: 8px 0 10px;">' + total + ' task' + (total === 1 ? '' : 's') + '</h5>';
+
+    html += '<div class="view-task-list">';
+    realTasks.forEach(({ taskId, data }) => {
+      html += renderViewTaskRow(taskId, {
+        ic: data.icon,
+        title: data.title,
+        meta: (OWNER_NAMES[data.owner] || data.owner) + ' · ' + (data.statusLabel || data.status || ''),
+        priority: data.priority,
+        done: data.status === 'done'
+      }, false);
+    });
+    extraTasks.forEach(t => {
+      html += renderViewTaskRow(null, t, isScenario);
+    });
+    html += '</div>';
+
+    html += '</div>'; // body
+
+    // Footer — different for scenarios
+    html += '<div class="proto-detail-foot">';
+    if (isScenario) {
+      html += '<button class="modal-btn sunrun-btn" onclick="commitScenario(\'' + viewId + '\')">✨ Commit scenario to plan</button>';
+      html += '<button class="modal-btn" onclick="closeTaskDetail()">Discard</button>';
+      html += '<button class="modal-btn" style="margin-left:auto;">Compare with another</button>';
+    } else {
+      html += '<button class="modal-btn primary">+ Add to view</button>';
+      html += '<button class="modal-btn">Edit filter</button>';
+      html += '<button class="modal-btn" style="margin-left:auto;">Share view</button>';
+    }
+    html += '</div>';
+
+    document.getElementById('proto-detail-panel').innerHTML = html;
+  }
+
+  function renderViewTaskRow(taskId, t, ghosted) {
+    const onclick = taskId ? 'openTaskDetail(\'' + taskId + '\')' : '';
+    const cls = 'view-task-row' + (ghosted ? ' ghosted' : '') + (t.done ? ' done' : '') + (t.milestone ? ' milestone' : '');
+    let html = '<div class="' + cls + '"' + (onclick ? ' onclick="' + onclick + '"' : '') + '>';
+    html += '<div class="check"></div>';
+    if (t.priority) html += '<span class="col-priority-pill ' + t.priority.toLowerCase() + '">' + t.priority + '</span>';
+    html += '<span class="ic">' + t.ic + '</span>';
+    html += '<span class="ttl">' + escapeHtml(t.title) + '</span>';
+    html += '<span class="meta">' + escapeHtml(t.meta) + '</span>';
+    html += '</div>';
+    return html;
+  }
+
+  function commitScenario(viewId) {
+    showToast('✨ Committing scenario to plan… 12 tasks scheduled across May 1–19. <span class="toast-undo">Undo</span>', true);
+    proto.set('SCENARIO·COMMIT', 'Scenario committed. In production: tasks fly into respective columns, owner assignments + dates locked. Undo within 30s.', 'sunrun');
+    setTimeout(() => closeTaskDetail(), 800);
+  }
+
+  function clearView() {
+    document.querySelectorAll('.saved-view').forEach(v => v.classList.remove('active'));
+    const banner = document.getElementById('stage-filter-banner');
+    if (banner) banner.remove();
+    clearFilterFromCanvas();
+    proto.set('IDLE', 'View cleared. Showing full plan.');
+  }
+
+  function clearFilterFromCanvas() {
+    document.querySelectorAll('.scenario-ghost').forEach(g => g.remove());
+    document.querySelectorAll('.stage-task[data-task-id]').forEach(taskEl => {
+      taskEl.style.display = '';
+      const wrap = taskEl.nextElementSibling;
+      if (wrap && wrap.classList.contains('stage-subtasks-wrap')) {
+        wrap.style.display = taskEl.classList.contains('expanded') ? 'block' : 'none';
+      }
+    });
+    resetColumnMeta();
+  }
+
+  function saveCurrentView() {
+    const name = window.prompt('Name this view:');
+    if (!name || !name.trim()) return;
+    const list = document.getElementById('saved-views-list');
+    if (!list) return;
+    const id = 'custom-' + Date.now();
+    VIEW_DATA[id] = { name: '📌 ' + name, kind: 'normal', desc: 'Your custom saved view.', tasks: [], extraTasks: [] };
+    const item = document.createElement('div');
+    item.className = 'saved-view';
+    item.setAttribute('data-view-id', id);
+    item.innerHTML = '<span class="ic">📌</span><span class="name">' + escapeHtml(name) + '</span><span class="ct">—</span>';
+    item.onclick = () => applyView(id, '📌 ' + name, 'normal');
+    list.appendChild(item);
+    showToast('+ Saved view: ' + escapeHtml(name) + ' · added to Views', true);
+    proto.set('VIEW·SAVE', 'Saved a new view. (In production, captures current filters + sort + group settings.)');
+  }
+
+  // === Transcripts (Sunspoke meeting captures) ===
+    document.querySelectorAll('.saved-view').forEach(v => {
+      v.classList.toggle('active', v.getAttribute('data-view-id') === viewId);
+    });
+    let banner = document.getElementById('stage-filter-banner');
+    if (!banner) {
+      banner = document.createElement('div');
+      banner.id = 'stage-filter-banner';
+      banner.className = 'stage-filter-banner';
+      const stage3panel = document.querySelector('.stage-3panel');
+      if (stage3panel) stage3panel.parentNode.insertBefore(banner, stage3panel);
+    }
+    banner.classList.toggle('scenario', kind === 'scenario');
+    const labelText = kind === 'scenario' ? 'Scenario' : 'Filtered';
+    banner.innerHTML = '<span class="label">' + labelText + '</span><span class="name">' + viewName + '</span><button class="clear" onclick="clearView()">✕ Clear</button>';
+    proto.set(kind === 'scenario' ? 'SCENARIO' : 'VIEW',
+      kind === 'scenario'
+        ? 'Scenario active: <strong style="color:white;">' + viewName + '</strong>. (Stage would show ghosted simulated tasks. Click Clear to return to live plan.)'
+        : 'Filter applied: <strong style="color:white;">' + viewName + '</strong>. (Stage would re-filter to match. Click Clear to remove.)',
+      kind === 'scenario' ? 'sunrun' : null);
+  }
+
+  function clearView() {
+    document.querySelectorAll('.saved-view').forEach(v => v.classList.remove('active'));
+    const banner = document.getElementById('stage-filter-banner');
+    if (banner) banner.remove();
+    proto.set('IDLE', 'View cleared. Showing full plan.');
+  }
+
+  function saveCurrentView() {
+    const name = window.prompt('Name this view:');
+    if (!name || !name.trim()) return;
+    const list = document.getElementById('saved-views-list');
+    if (!list) return;
+    const id = 'custom-' + Date.now();
+    const item = document.createElement('div');
+    item.className = 'saved-view';
+    item.setAttribute('data-view-id', id);
+    item.innerHTML = '<span class="ic">📌</span><span class="name">' + escapeHtml(name) + '</span><span class="ct">—</span>';
+    item.onclick = () => applyView(id, '📌 ' + name, 'normal');
+    list.appendChild(item);
+    showToast('+ Saved view: ' + escapeHtml(name) + ' · added to Views', true);
+    proto.set('VIEW·SAVE', 'Saved a new view. (In production, this captures current filters + sort + group settings.)');
+  }
 
   // === Transcripts (Sunspoke meeting captures) ===
   const TRANSCRIPTS = [
@@ -7736,6 +8631,19 @@ Last updated: May 2026 · Companion to <code>wayeez_task_component_spec.html</co
     html += '<div class="stat"><div class="num">' + totalArchived + '</div><div class="lbl-text">Archived (musing)</div></div>';
     html += '</div>';
 
+    // Lightweight AI summary across all transcripts
+    html += '<div class="transcripts-summary">';
+    html += '<div class="ts-head"><span class="ts-tag">✨ Sunline summary</span><span class="ts-period">Apr 20 – Apr 30 · 4h 18m total</span></div>';
+    html += '<div class="ts-body">';
+    html += 'You spent <strong>~4 hours</strong> in meetings this period — heaviest threads were <strong>Suncraft launch timing</strong> (3 mtgs), <strong>Sunline interface design</strong> (2 mtgs), and <strong>Aither sunset migration</strong> (2 mtgs). ';
+    html += '<br><br>';
+    html += '<strong>Settled:</strong> split detail panel into Chat/Info tabs · pinned rationale at top of Thread · 30-client batched Aither migration over 3 weeks.';
+    html += '<br><br>';
+    html += '<strong>Pending decisions:</strong> Suncraft launch date (May 12 vs May 19 vs May 26) · Sunrun mission for outreach personalization (32 drafts awaiting your review).';
+    html += '</div>';
+    html += '<button class="ts-decisions-link" onclick="closeTranscriptsModal(); openDecisionsModal();">→ See decisions tree</button>';
+    html += '</div>';
+
     html += '<div class="transcripts-list">';
     TRANSCRIPTS.forEach(m => {
       html += '<div class="mtg-card" id="mtg-' + m.id + '">';
@@ -7795,6 +8703,183 @@ Last updated: May 2026 · Companion to <code>wayeez_task_component_spec.html</co
   function toggleMeeting(id) {
     const card = document.getElementById('mtg-' + id);
     if (card) card.classList.toggle('expanded');
+  }
+
+  // === Decisions tree ===
+  const DECISIONS = [
+    {
+      week: 'Week of Apr 28',
+      meta: 'Apr 28 – May 4 · 2 settled · 2 pending',
+      items: [
+        {
+          theme: 'Sunline',
+          status: 'active',
+          text: 'Split task detail panel into Chat + Info tabs (with later addition of Activity + Connections — 4 tabs total)',
+          source: { who: 'Wayeez', mtg: 'Apr 28 design crit', timecode: '08:14' },
+          effects: 'Created 4 design tasks (Wayeez column). Status: 3 done, 1 in-progress.'
+        },
+        {
+          theme: 'Sunline',
+          status: 'active',
+          text: 'Pin rationale + objective at top of Thread tab — context never gets lost',
+          source: { who: 'Jazz', mtg: 'Apr 28 design crit', timecode: '09:02' },
+          effects: 'Done · shipped May 1.'
+        },
+        {
+          theme: 'Suncraft',
+          status: 'pending',
+          text: 'Suncraft launch date — between May 12 and May 26',
+          source: { who: 'Jazz', mtg: 'Apr 30 product mtg', timecode: '12:34' },
+          effects: 'Pending decision · 2 clarification questions awaiting your input on the draft task.'
+        },
+        {
+          theme: 'Aither',
+          status: 'pending',
+          text: 'Send 32 low-confidence Sunrun-drafted outreach emails — approve, edit, or reject',
+          source: { who: 'Sunrun', mtg: 'Run #14 auto-flagged', timecode: '12:38' },
+          effects: 'Awaiting human review · review task in Jazz column.'
+        }
+      ]
+    },
+    {
+      week: 'Week of Apr 21',
+      meta: 'Apr 21 – Apr 27 · 3 settled · 1 superseded',
+      items: [
+        {
+          theme: 'Aither',
+          status: 'active',
+          text: 'Migrate ~30 clients to sunset state in 3 batches over 3 weeks',
+          source: { who: 'Jazz', mtg: 'Apr 20 Aither sunset planning', timecode: '04:12' },
+          effects: 'Created 6 tasks. Batch 1 done · batch 2 in-progress · batch 3 queued.'
+        },
+        {
+          theme: 'Suncraft',
+          status: 'active',
+          text: 'Lock pricing tiers with $50K mid-tier as anchor',
+          source: { who: 'Michael', mtg: 'Apr 24 Suncraft strategy', timecode: '15:20' },
+          effects: 'Pricing decision feeds into Suncraft launch scenario.'
+        },
+        {
+          theme: 'Sunline',
+          status: 'superseded',
+          text: 'Use a single dense detail-panel page (no tabs)',
+          source: { who: 'Jazz', mtg: 'Apr 21 internal sketch', timecode: '—' },
+          effects: 'Superseded Apr 28 by tab-based design (above).'
+        },
+        {
+          theme: 'Investor',
+          status: 'active',
+          text: 'Send updated deck + follow-up note by Monday May 5',
+          source: { who: 'Jazz', mtg: 'Apr 26 investor call', timecode: '47:22' },
+          effects: 'Active task in Jazz column.'
+        }
+      ]
+    },
+    {
+      week: 'Week of Apr 14',
+      meta: 'Apr 14 – Apr 20 · 2 settled',
+      items: [
+        {
+          theme: 'Sunpull',
+          status: 'active',
+          text: 'Empty states should encourage, not punish — warm tones, single primary action',
+          source: { who: 'Wayeez', mtg: 'Saved from Linear post', timecode: 'save · Apr 9' },
+          effects: 'Influences "Sunline interface — empty states" task (Wayeez).'
+        },
+        {
+          theme: 'Sun OS',
+          status: 'active',
+          text: 'Sunpull = memory · Sunline = planning · Sunrun = execution. Three layers, one stack.',
+          source: { who: 'Jazz', mtg: 'Apr 18 system sketch', timecode: '—' },
+          effects: 'Architecture commitment. Drives all product decisions.'
+        }
+      ]
+    }
+  ];
+
+  function openDecisionsModal() {
+    let html = '';
+    html += '<div class="transcripts-head">';
+    html += '<div class="av" style="background: rgba(180,122,63,0.15); color: var(--accent);">🌳</div>';
+    html += '<div class="meta"><div class="ttl">Decisions tree</div>';
+    html += '<div class="src-line">What got settled, week by week · auto-extracted from meetings + Slack + saves</div></div>';
+    html += '<button class="x" onclick="closeDecisionsModal()">✕</button>';
+    html += '</div>';
+
+    // Stats
+    let totalActive = 0, totalPending = 0, totalSuperseded = 0;
+    DECISIONS.forEach(w => w.items.forEach(d => {
+      if (d.status === 'active') totalActive++;
+      else if (d.status === 'pending') totalPending++;
+      else if (d.status === 'superseded') totalSuperseded++;
+    }));
+    html += '<div class="transcripts-stats">';
+    html += '<div class="stat"><div class="num">' + DECISIONS.length + '</div><div class="lbl-text">Weeks</div></div>';
+    html += '<div class="stat"><div class="num">' + totalActive + '</div><div class="lbl-text">Active</div></div>';
+    html += '<div class="stat"><div class="num">' + totalPending + '</div><div class="lbl-text">Pending</div></div>';
+    html += '<div class="stat"><div class="num">' + totalSuperseded + '</div><div class="lbl-text">Superseded</div></div>';
+    html += '</div>';
+
+    // Theme filter chips
+    const themes = ['All', 'Sunline', 'Sunpull', 'Suncraft', 'Aither', 'Investor', 'Sun OS'];
+    const counts = { 'All': totalActive + totalPending + totalSuperseded };
+    DECISIONS.forEach(w => w.items.forEach(d => { counts[d.theme] = (counts[d.theme] || 0) + 1; }));
+    html += '<div class="dec-themes-bar">';
+    themes.forEach(t => {
+      const ct = counts[t] || 0;
+      if (t !== 'All' && ct === 0) return;
+      html += '<button class="dec-theme-chip ' + (t === 'All' ? 'active' : '') + '" data-theme="' + t + '">' + t + '<span class="ct">' + ct + '</span></button>';
+    });
+    html += '</div>';
+
+    // Body
+    html += '<div class="decisions-body">';
+    DECISIONS.forEach(w => {
+      html += '<div class="dec-week">';
+      html += '<div class="week-head">';
+      html += '<div class="week-name">' + escapeHtml(w.week) + '</div>';
+      html += '<div class="week-meta">' + escapeHtml(w.meta) + '</div>';
+      html += '</div>';
+      html += '</div>';
+      html += '<div class="dec-list">';
+      w.items.forEach(d => {
+        html += '<div class="dec-item ' + d.status + '" data-theme="' + d.theme + '">';
+        html += '<div class="timeline-dot"></div>';
+        html += '<div class="dec-content">';
+        html += '<div class="dec-tags">';
+        html += '<span class="dec-tag theme">' + d.theme + '</span>';
+        html += '<span class="dec-tag status-' + d.status + '">' + d.status + '</span>';
+        html += '</div>';
+        html += '<div class="dec-text">' + escapeHtml(d.text) + '</div>';
+        html += '<div class="dec-source"><span class="who">' + escapeHtml(d.source.who) + '</span> · ' + escapeHtml(d.source.mtg) + ' @ ' + escapeHtml(d.source.timecode) + '</div>';
+        html += '<div class="dec-effects"><strong>Downstream:</strong> ' + escapeHtml(d.effects) + '</div>';
+        html += '</div>';
+        html += '</div>';
+      });
+      html += '</div>';
+    });
+    html += '</div>';
+
+    document.getElementById('decisions-modal').innerHTML = html;
+    document.getElementById('decisions-overlay').classList.add('active');
+
+    // Theme filter behavior
+    document.querySelectorAll('.dec-theme-chip').forEach(chip => {
+      chip.addEventListener('click', () => {
+        document.querySelectorAll('.dec-theme-chip').forEach(c => c.classList.remove('active'));
+        chip.classList.add('active');
+        const t = chip.getAttribute('data-theme');
+        document.querySelectorAll('.dec-item').forEach(i => {
+          i.style.display = (t === 'All' || i.getAttribute('data-theme') === t) ? '' : 'none';
+        });
+      });
+    });
+
+    proto.set('DECISIONS', 'Opened decisions tree. Filter by theme using chips above. Decisions trace back to meetings, Slack threads, or saves — and forward to the tasks they generated.');
+  }
+
+  function closeDecisionsModal() {
+    document.getElementById('decisions-overlay').classList.remove('active');
   }
 
   // === Subtasks rendered inline in columns ===
