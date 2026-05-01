@@ -4978,12 +4978,12 @@ Last updated: May 2026 · Companion to <code>wayeez_task_component_spec.html</co
         <div class="mt" id="proto-meta-jazz">3 tasks · 8h</div>
       </div>
       <div class="stage-tasks" id="proto-tasks-jazz">
-        <div class="stage-task review-task" data-task-id="review-aither-batch"><div class="check"></div><div class="ic">⚡</div><span class="ttl">Review: Sunrun drafted 32 emails</span><span class="review-pill">REVIEW</span></div>
-        <div class="stage-task needs-clarification" data-task-id="slack-aither-followup"><div class="check"></div><span class="col-priority-pill p2">P2</span><div class="ic">💬</div><span class="ttl">Follow up with Aither on pricing</span><span class="draft-pill">DRAFT</span></div>
-        <div class="stage-task needs-clarification" data-task-id="mtg-suncraft-launch"><div class="check"></div><span class="col-priority-pill p1">P1</span><div class="ic">🚀</div><span class="ttl">Decide Suncraft launch date</span><span class="draft-pill">DRAFT</span></div>
-        <div class="stage-task" data-task-id="aether-sunset"><div class="check"></div><span class="col-priority-pill p1">P1</span><div class="ic">✉</div><span class="ttl">Send Aether sunset email batch 2</span></div>
-        <div class="stage-task" data-task-id="pricing-tiers"><div class="check"></div><div class="ic">🎯</div><span class="ttl">Finalize Suncraft pricing tiers</span></div>
-        <div class="stage-task" data-task-id="investor-prep"><div class="check"></div><div class="ic">📞</div><span class="ttl">Investor call prep — deck review</span></div>
+        <div class="stage-task review-task" data-task-id="review-aither-batch" draggable="true"><div class="check"></div><div class="ic">⚡</div><span class="ttl">Review: Sunrun drafted 32 emails</span><span class="review-pill">REVIEW</span></div>
+        <div class="stage-task needs-clarification" data-task-id="slack-aither-followup" draggable="true"><div class="check"></div><span class="col-priority-pill p2">P2</span><div class="ic">💬</div><span class="ttl">Follow up with Aither on pricing</span><span class="draft-pill">DRAFT</span></div>
+        <div class="stage-task needs-clarification" data-task-id="mtg-suncraft-launch" draggable="true"><div class="check"></div><span class="col-priority-pill p1">P1</span><div class="ic">🚀</div><span class="ttl">Decide Suncraft launch date</span><span class="draft-pill">DRAFT</span></div>
+        <div class="stage-task" data-task-id="aether-sunset" draggable="true"><div class="check"></div><span class="col-priority-pill p1">P1</span><div class="ic">✉</div><span class="ttl">Send Aether sunset email batch 2</span></div>
+        <div class="stage-task" data-task-id="pricing-tiers" draggable="true"><div class="check"></div><div class="ic">🎯</div><span class="ttl">Finalize Suncraft pricing tiers</span></div>
+        <div class="stage-task" data-task-id="investor-prep" draggable="true"><div class="check"></div><div class="ic">📞</div><span class="ttl">Investor call prep — deck review</span></div>
       </div>
       <div class="stage-add-row" data-owner="jazz">+ Add task</div>
     </div>
@@ -4995,8 +4995,8 @@ Last updated: May 2026 · Companion to <code>wayeez_task_component_spec.html</co
         <div class="mt" id="proto-meta-wayeez">2 tasks · 6h</div>
       </div>
       <div class="stage-tasks" id="proto-tasks-wayeez">
-        <div class="stage-task" data-task-id="empty-states"><div class="check"></div><div class="ic">🎨</div><span class="ttl">Sunline interface — empty states</span></div>
-        <div class="stage-task" data-task-id="task-component"><div class="check"></div><div class="ic">📐</div><span class="ttl">Task component v2 — pixel pass</span></div>
+        <div class="stage-task" data-task-id="empty-states" draggable="true"><div class="check"></div><div class="ic">🎨</div><span class="ttl">Sunline interface — empty states</span></div>
+        <div class="stage-task" data-task-id="task-component" draggable="true"><div class="check"></div><div class="ic">📐</div><span class="ttl">Task component v2 — pixel pass</span></div>
       </div>
       <div class="stage-add-row" data-owner="wayeez">+ Add task</div>
     </div>
@@ -5008,7 +5008,7 @@ Last updated: May 2026 · Companion to <code>wayeez_task_component_spec.html</co
         <div class="mt" id="proto-meta-sunrun">1 mission · running</div>
       </div>
       <div class="stage-tasks" id="proto-tasks-sunrun">
-        <div class="stage-task sunrun-task" data-task-id="aither-pipeline">
+        <div class="stage-task sunrun-task" data-task-id="aither-pipeline" draggable="true">
           <div class="check"></div>
           <div class="ic">⚡</div>
           <span class="ttl">Aither outreach pipeline — batch 14</span>
@@ -6721,6 +6721,7 @@ Last updated: May 2026 · Companion to <code>wayeez_task_component_spec.html</co
     // Generate id and register minimal task data so clicking opens detail
     const id = 'new-' + Date.now() + '-' + Math.floor(Math.random() * 1000);
     task.setAttribute('data-task-id', id);
+    task.setAttribute('draggable', 'true');
     TASK_DATA[id] = {
       title: title,
       icon: icon || '☐',
@@ -7243,6 +7244,7 @@ Last updated: May 2026 · Companion to <code>wayeez_task_component_spec.html</co
         task.className = 'stage-task added glow';
         if (isSunrun) task.classList.add('sunrun-task');
         task.setAttribute('data-task-id', existingId);
+        task.setAttribute('draggable', 'true');
         let inner = '<div class="check"></div>';
         if (data.priority) {
           inner += '<span class="col-priority-pill ' + data.priority.toLowerCase() + '">' + data.priority + '</span>';
