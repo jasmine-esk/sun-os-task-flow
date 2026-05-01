@@ -2687,12 +2687,56 @@
     box-shadow: 0 4px 14px rgba(0,0,0,0.15);
   }
   .stage-column { position: relative; }
+
+  /* Mega "drop anywhere → backlog" zone — only shown during stage-task drag */
+  .backlog-mega-drop {
+    display: none;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 16px;
+    border: 2px dashed var(--accent);
+    border-radius: 8px;
+    background: var(--accent-soft);
+    color: var(--accent);
+    font-size: 12px;
+    font-weight: 600;
+    margin: 0 0 10px;
+    line-height: 1.3;
+    transition: all 0.15s;
+  }
+  body.dnd-task-active .backlog-mega-drop { display: flex; }
+  .backlog-mega-drop .mega-arrow {
+    font-size: 22px;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+  .backlog-mega-drop .mega-text { flex: 1; }
+  .backlog-mega-drop .mega-text small {
+    display: block;
+    font-size: 10.5px;
+    color: var(--ink-soft);
+    font-weight: 500;
+    margin-top: 2px;
+    letter-spacing: 0;
+    text-transform: none;
+  }
+  .backlog-mega-drop.drop-target-active {
+    background: var(--accent);
+    color: white;
+    border-style: solid;
+    transform: scale(1.02);
+  }
+  .backlog-mega-drop.drop-target-active .mega-text small { color: rgba(255,255,255,0.85); }
+
+  /* Bucket drop styles — bigger, clearer during drag */
   .backlog-bucket.drop-target-active {
-    background: rgba(180,122,63,0.05);
+    background: rgba(180,122,63,0.10);
     outline: 2px dashed var(--accent);
     outline-offset: -2px;
     border-radius: 6px;
   }
+  .backlog-bucket.drop-target-active .backlog-bucket-head .name { color: var(--accent); }
+
   body.dnd-backlog-active .stage-column,
   body.dnd-task-active .backlog-bucket {
     transition: background 0.15s, outline 0.15s;
@@ -2702,6 +2746,26 @@
   }
   body.dnd-task-active .backlog-bucket:not(.drop-target-active) {
     background: rgba(180,122,63,0.015);
+    border-radius: 5px;
+  }
+  /* Auto-expand bucket items area during drag for easier targeting */
+  body.dnd-task-active .backlog-bucket .backlog-items {
+    display: block;
+    min-height: 24px;
+    padding-bottom: 8px;
+  }
+  body.dnd-task-active .backlog-bucket:not(.open) .backlog-items {
+    min-height: 20px;
+  }
+  body.dnd-task-active .backlog-bucket:not(.open) .backlog-items::before {
+    content: '↓ drop here';
+    display: block;
+    font-size: 10px;
+    color: var(--ink-faint);
+    font-style: italic;
+    text-align: center;
+    padding: 4px 0;
+    letter-spacing: 0.04em;
   }
 
   /* === Fixed-top in detail panel + Chat/Info tabs === */
@@ -3014,7 +3078,120 @@
     flex-shrink: 0;
   }
 
-  /* === Chat tab === */
+  /* === Chat / Thread tab === */
+  /* Pinned context card at top of Thread (rationale + desc + saves count) */
+  .dt-chat-pin {
+    background: white;
+    border: 1px solid var(--hairline);
+    border-radius: 10px;
+    padding: 14px 16px 14px;
+    margin: 4px 0 14px;
+    position: relative;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.03);
+  }
+  .dt-chat-pin .pin-x {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: none;
+    border: none;
+    color: var(--ink-faint);
+    font-size: 14px;
+    cursor: pointer;
+    padding: 4px 7px;
+    border-radius: 4px;
+    font-family: inherit;
+    line-height: 1;
+  }
+  .dt-chat-pin .pin-x:hover {
+    color: var(--ink);
+    background: var(--bg-soft);
+  }
+  .dt-chat-pin .pin-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: var(--accent-soft);
+    color: var(--accent);
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 9.5px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 10px;
+  }
+  .dt-chat-pin .pin-section {
+    margin-bottom: 11px;
+    padding-bottom: 11px;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+  }
+  .dt-chat-pin .pin-section:last-child {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+  }
+  .dt-chat-pin .pin-label {
+    font-size: 9.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--accent);
+    font-weight: 700;
+    margin-bottom: 5px;
+  }
+  .dt-chat-pin .pin-body {
+    font-size: 12.5px;
+    line-height: 1.5;
+    color: var(--ink);
+  }
+  .dt-chat-pin .pin-body.desc { color: var(--ink-soft); font-size: 12px; }
+  .dt-chat-pin .pin-objective {
+    font-size: 11.5px;
+    color: var(--ink-soft);
+    margin-top: 7px;
+    padding-top: 7px;
+    border-top: 1px solid rgba(180,122,63,0.15);
+  }
+  .dt-chat-pin .pin-objective strong {
+    color: var(--accent);
+    font-weight: 600;
+  }
+  .dt-chat-pin .pin-saves {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--bg);
+    padding: 8px 11px;
+    border-radius: 6px;
+    font-size: 12px;
+    color: var(--ink-soft);
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .dt-chat-pin .pin-saves:hover { background: var(--bg-soft); }
+  .dt-chat-pin .pin-saves strong { color: var(--ink); }
+  .dt-chat-pin .pin-saves-link {
+    margin-left: auto;
+    color: var(--accent);
+    font-weight: 500;
+    font-size: 11px;
+  }
+  .dt-chat-pin .pin-saves-icon { font-size: 14px; }
+  .pin-restore-link {
+    font-size: 11px;
+    color: var(--ink-faint);
+    text-align: center;
+    padding: 7px;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-bottom: 8px;
+    background: var(--bg);
+  }
+  .pin-restore-link:hover {
+    color: var(--accent);
+    background: var(--bg-soft);
+  }
+
   .dt-chat-thread { padding: 4px 0 0; }
   .dt-chat-msg {
     display: flex;
@@ -4713,6 +4890,12 @@ Last updated: May 2026 · Companion to <code>wayeez_task_component_spec.html</co
       <h6>Backlog <button class="add-link" title="Add">+</button></h6>
       <input type="text" class="backlog-search" placeholder="Search backlog…" />
 
+      <!-- Mega drop zone (visible only during stage→backlog drag) -->
+      <div class="backlog-mega-drop" data-default-bucket="deferred">
+        <div class="mega-arrow">↓</div>
+        <div class="mega-text">Drop anywhere to defer<small>or hover a specific bucket below</small></div>
+      </div>
+
       <div class="backlog-bucket open" data-bucket="inbox">
         <div class="backlog-bucket-head" onclick="this.parentElement.classList.toggle('open')">
           <span class="arrow">▶</span>
@@ -6064,6 +6247,53 @@ Last updated: May 2026 · Companion to <code>wayeez_task_component_spec.html</co
     let html = '<div class="dt-chat-thread">';
     const owner = d.owner || 'jazz';
 
+    // === Pinned context card (always at top, dismissible) ===
+    const hasRat = d.rationale && d.rationale.trim();
+    const hasDesc = d.desc && d.desc.trim();
+    const hasSaves = d.refs && d.refs.length > 0;
+    const pinHasContent = hasRat || hasDesc || hasSaves || d.objective;
+    if (pinHasContent && !d.pinDismissed && !d.isReview) {
+      html += '<div class="dt-chat-pin">';
+      html += '<div class="pin-tag">📌 Pinned context</div>';
+      html += '<button class="pin-x" onclick="event.stopPropagation(); dismissChatPin(\'' + id + '\')" title="Hide pin">✕</button>';
+
+      if (hasRat) {
+        html += '<div class="pin-section">';
+        html += '<div class="pin-label">Why this matters</div>';
+        html += '<div class="pin-body">' + escapeHtml(d.rationale) + '</div>';
+        if (d.objective) {
+          html += '<div class="pin-objective">→ tied to: <strong>' + escapeHtml(d.objective.label) + '</strong></div>';
+        }
+        html += '</div>';
+      } else if (d.objective) {
+        html += '<div class="pin-section">';
+        html += '<div class="pin-label">Tied to objective</div>';
+        html += '<div class="pin-body"><strong style="color:var(--accent);">' + escapeHtml(d.objective.label) + '</strong></div>';
+        html += '</div>';
+      }
+
+      if (hasDesc) {
+        html += '<div class="pin-section">';
+        html += '<div class="pin-label">Description</div>';
+        html += '<div class="pin-body desc">' + escapeHtml(d.desc) + '</div>';
+        html += '</div>';
+      }
+
+      if (hasSaves) {
+        html += '<div class="pin-section">';
+        html += '<div class="pin-saves" onclick="event.stopPropagation(); switchDetailTab(\'refs\', \'' + id + '\')">';
+        html += '<span class="pin-saves-icon">📎</span>';
+        html += '<span><strong>' + d.refs.length + ' save' + (d.refs.length > 1 ? 's' : '') + '</strong> connected</span>';
+        html += '<span class="pin-saves-link">View →</span>';
+        html += '</div>';
+        html += '</div>';
+      }
+
+      html += '</div>';
+    } else if (pinHasContent && d.pinDismissed) {
+      html += '<div class="pin-restore-link" onclick="event.stopPropagation(); restoreChatPin(\'' + id + '\')">📌 Show pinned context</div>';
+    }
+
     // System message: where this came from + when
     if (d.source) {
       html += '<div class="dt-chat-msg system">';
@@ -6248,6 +6478,22 @@ Last updated: May 2026 · Companion to <code>wayeez_task_component_spec.html</co
     closeRefPeek();
     renderTaskDetail(t, taskId);
     showToast('Detached from task: ' + escapeHtml(removed.title.slice(0, 40)) + '… · <span class="toast-undo">Undo</span>', false);
+  }
+
+  // === Pin dismiss / restore ===
+  function dismissChatPin(id) {
+    const data = TASK_DATA[id];
+    if (!data) return;
+    data.pinDismissed = true;
+    renderTaskDetail(data, id);
+    proto.set('PIN·HIDE', 'Pinned context hidden. Click "Show pinned context" at top of Thread to bring it back.');
+  }
+  function restoreChatPin(id) {
+    const data = TASK_DATA[id];
+    if (!data) return;
+    data.pinDismissed = false;
+    renderTaskDetail(data, id);
+    proto.set('PIN·SHOW', 'Pinned context restored.');
   }
 
   // === Tab switching ===
@@ -6925,6 +7171,8 @@ Last updated: May 2026 · Companion to <code>wayeez_task_component_spec.html</co
       dragPayload = { type: 'task', taskId, sourceEl: stageTask };
       stageTask.classList.add('dragging');
       document.body.classList.add('dnd-task-active');
+      // Auto-expand all backlog buckets so they're all bigger drop targets
+      document.querySelectorAll('.backlog-bucket').forEach(b => b.classList.add('open'));
     } else {
       return;
     }
@@ -6947,11 +7195,14 @@ Last updated: May 2026 · Companion to <code>wayeez_task_component_spec.html</co
     if (dragPayload.type === 'backlog') {
       target = e.target.closest && e.target.closest('.stage-column');
     } else if (dragPayload.type === 'task') {
-      target = e.target.closest && e.target.closest('.backlog-bucket');
+      // Prefer specific bucket, but accept the mega zone or anywhere in the backlog rail
+      const bucket = e.target.closest && e.target.closest('.backlog-bucket');
+      const mega = e.target.closest && e.target.closest('.backlog-mega-drop');
+      const rail = e.target.closest && e.target.closest('.stage-rail-left');
+      target = bucket || mega || rail;
     }
     if (target) {
       e.preventDefault();
-      // Clear other targets, mark this one
       document.querySelectorAll('.drop-target-active').forEach(el => {
         if (el !== target) el.classList.remove('drop-target-active');
       });
@@ -7034,8 +7285,13 @@ Last updated: May 2026 · Companion to <code>wayeez_task_component_spec.html</co
       proto.set('DRAG·DROP', 'Moved from backlog → <strong style="color:white;">' + (OWNER_NAMES[owner] || owner) + '</strong>\'s plan.');
       showToast('+ Added to ' + (OWNER_NAMES[owner] || owner) + '\'s plan · <span class="toast-undo">Undo</span>', true);
     } else if (dragPayload.type === 'task') {
-      // Stage → backlog bucket
-      const bucket = e.target.closest && e.target.closest('.backlog-bucket');
+      // Stage → backlog. Accept specific bucket, mega zone, or anywhere in rail (default = Deferred)
+      let bucket = e.target.closest && e.target.closest('.backlog-bucket');
+      if (!bucket) {
+        // Fall back to a default bucket (Deferred) when dropped on mega zone or rail
+        bucket = document.querySelector('.backlog-bucket[data-bucket="deferred"]') ||
+                 document.querySelector('.backlog-bucket');
+      }
       if (!bucket) return;
       const taskId = dragPayload.taskId;
       const data = TASK_DATA[taskId];
