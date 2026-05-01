@@ -1,20 +1,24 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Create-Task Flow — Design Spec for Wayeez</title>
 <style>
   :root {
+    /* Light theme (default fallback) */
     --bg: #FAF9F6;
     --bg-panel: #FFFFFF;
     --bg-soft: #F4F1EB;
+    --bg-elevated: #FFFFFF;
     --ink: #1A1A1A;
     --ink-soft: #555555;
     --ink-faint: #999999;
     --hairline: rgba(0,0,0,0.08);
+    --hairline-strong: rgba(0,0,0,0.14);
     --accent: #B47A3F;
     --accent-soft: rgba(180,122,63,0.10);
+    --accent-glow: rgba(180,122,63,0.18);
     --code-bg: #F0EDE7;
     --good: #5A8F5A;
     --warn: #C26A3F;
@@ -25,6 +29,232 @@
     --owner-wayeez: #A8C8D8;
     --owner-michael: #C8D8A8;
     --owner-sunrun: #DCD3F0;
+    --shadow-card: 0 1px 3px rgba(0,0,0,0.03);
+    --shadow-elevated: 0 4px 24px rgba(0,0,0,0.05);
+    --shadow-modal: 0 20px 60px rgba(0,0,0,0.25);
+    --glow-accent: 0 0 0 1px var(--accent-glow);
+  }
+
+  :root[data-theme="dark"] {
+    /* Dark theme — warm-undertone near-black, subtle gold accent */
+    --bg: #0E0D0B;
+    --bg-panel: #15130F;
+    --bg-soft: #1E1B15;
+    --bg-elevated: #1A1813;
+    --ink: #F0ECE2;
+    --ink-soft: #ADA89B;
+    --ink-faint: #6B675D;
+    --hairline: rgba(240,236,226,0.06);
+    --hairline-strong: rgba(240,236,226,0.12);
+    --accent: #D9A26B;
+    --accent-soft: rgba(217,162,107,0.14);
+    --accent-glow: rgba(217,162,107,0.30);
+    --code-bg: #1A1813;
+    --good: #82B582;
+    --warn: #DD8E64;
+    --danger: #DD7B6B;
+    --sunrun: #9F8FD5;
+    --sunrun-soft: rgba(159,143,213,0.16);
+    --owner-jazz: #6E5575;
+    --owner-wayeez: #4D6A82;
+    --owner-michael: #5C6B4A;
+    --owner-sunrun: #5F5290;
+    --shadow-card: 0 1px 3px rgba(0,0,0,0.40), 0 0 0 1px rgba(240,236,226,0.04);
+    --shadow-elevated: 0 8px 32px rgba(0,0,0,0.50), 0 0 0 1px rgba(240,236,226,0.05);
+    --shadow-modal: 0 32px 80px rgba(0,0,0,0.65), 0 0 0 1px rgba(240,236,226,0.06);
+    --glow-accent: 0 0 0 1px var(--accent-glow), 0 0 24px rgba(217,162,107,0.10);
+  }
+
+  /* Subtle warm radial accent for dark mode (top-left) */
+  :root[data-theme="dark"] body::before {
+    content: '';
+    position: fixed;
+    top: -200px;
+    left: -200px;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(217,162,107,0.05) 0%, transparent 60%);
+    pointer-events: none;
+    z-index: 0;
+  }
+  :root[data-theme="dark"] body { position: relative; }
+
+  /* === Dark-mode overrides for hardcoded white backgrounds === */
+  :root[data-theme="dark"] .stage-add-row.editing,
+  :root[data-theme="dark"] .stage,
+  :root[data-theme="dark"] .stage-task.added,
+  :root[data-theme="dark"] .stage-rail-left,
+  :root[data-theme="dark"] .stage-rail-right,
+  :root[data-theme="dark"] .stage-column,
+  :root[data-theme="dark"] .stage-topbar,
+  :root[data-theme="dark"] .widget,
+  :root[data-theme="dark"] .save-card,
+  :root[data-theme="dark"] .mtg-card,
+  :root[data-theme="dark"] .mtg-card.expanded,
+  :root[data-theme="dark"] .dt-chat-pin,
+  :root[data-theme="dark"] .dt-chat-input .input-wrap,
+  :root[data-theme="dark"] .dt-comment-input,
+  :root[data-theme="dark"] .dt-clarify-card .clarify-q,
+  :root[data-theme="dark"] .dt-clarify-card .q-opt,
+  :root[data-theme="dark"] .pf-ref .ref-btn,
+  :root[data-theme="dark"] .proto-modal,
+  :root[data-theme="dark"] .proto-detail-panel,
+  :root[data-theme="dark"] .proto-detail-fixed-top,
+  :root[data-theme="dark"] .proto-detail-head,
+  :root[data-theme="dark"] .ref-peek,
+  :root[data-theme="dark"] .ref-peek-head,
+  :root[data-theme="dark"] .transcripts-modal,
+  :root[data-theme="dark"] .transcripts-head,
+  :root[data-theme="dark"] .decisions-modal,
+  :root[data-theme="dark"] .save-view-btn,
+  :root[data-theme="dark"] .dec-themes-bar,
+  :root[data-theme="dark"] .modal-btn,
+  :root[data-theme="dark"] .pk-btn,
+  :root[data-theme="dark"] .ref-btn {
+    background: var(--bg-panel);
+  }
+  :root[data-theme="dark"] .stage-add-row.editing,
+  :root[data-theme="dark"] .pf-ref.kept,
+  :root[data-theme="dark"] .dt-chat-msg.system,
+  :root[data-theme="dark"] .dt-comment,
+  :root[data-theme="dark"] .dt-ref,
+  :root[data-theme="dark"] .dt-meta,
+  :root[data-theme="dark"] .dt-desc,
+  :root[data-theme="dark"] .dt-eval-item,
+  :root[data-theme="dark"] .dt-subtask-empty,
+  :root[data-theme="dark"] .dt-subtask-hint,
+  :root[data-theme="dark"] .pin-restore-link,
+  :root[data-theme="dark"] .pf,
+  :root[data-theme="dark"] .pf-loading,
+  :root[data-theme="dark"] .pf-ref,
+  :root[data-theme="dark"] .dt-preview-list,
+  :root[data-theme="dark"] .dt-review-stat,
+  :root[data-theme="dark"] .mtg-task-row,
+  :root[data-theme="dark"] .mtg-transcript,
+  :root[data-theme="dark"] .ref-peek-body .save-text,
+  :root[data-theme="dark"] .ref-peek-body .meta-cell,
+  :root[data-theme="dark"] .ref-peek-body .related-list .related-item,
+  :root[data-theme="dark"] .ref-peek-body .slack-msg,
+  :root[data-theme="dark"] .dec-week,
+  :root[data-theme="dark"] .dec-item .dec-effects,
+  :root[data-theme="dark"] .stage-task,
+  :root[data-theme="dark"] .view-task-row,
+  :root[data-theme="dark"] .pin-saves,
+  :root[data-theme="dark"] .col-priority-pill.p4,
+  :root[data-theme="dark"] .pri-mini.p4,
+  :root[data-theme="dark"] .dec-theme-chip,
+  :root[data-theme="dark"] .pf-refs-head .count,
+  :root[data-theme="dark"] .stage-task .subtask-mini-count,
+  :root[data-theme="dark"] .backlog-search,
+  :root[data-theme="dark"] .q-input,
+  :root[data-theme="dark"] .backlog-bucket-head .count {
+    background: var(--bg-soft);
+  }
+  /* Run-output stays its own dark canvas */
+  :root[data-theme="dark"] .dt-run-output { background: #08070A; }
+
+  /* Borders → dark-mode hairline */
+  :root[data-theme="dark"] .save-card,
+  :root[data-theme="dark"] .mtg-card,
+  :root[data-theme="dark"] .widget,
+  :root[data-theme="dark"] .dt-chat-pin,
+  :root[data-theme="dark"] .dt-clarify-card .clarify-q,
+  :root[data-theme="dark"] .dt-chat-input .input-wrap,
+  :root[data-theme="dark"] .dt-comment-input,
+  :root[data-theme="dark"] .modal-btn,
+  :root[data-theme="dark"] .pk-btn,
+  :root[data-theme="dark"] .ref-btn {
+    border-color: var(--hairline);
+  }
+
+  /* Backdrop dim — deeper for dark */
+  :root[data-theme="dark"] .proto-overlay,
+  :root[data-theme="dark"] .ref-peek-overlay,
+  :root[data-theme="dark"] .transcripts-overlay,
+  :root[data-theme="dark"] .decisions-overlay {
+    background: rgba(5,4,3,0.65);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+  }
+
+  /* Stage-task hover lifts in dark */
+  :root[data-theme="dark"] .stage-task:hover {
+    background: var(--bg-elevated);
+    box-shadow: 0 0 0 1px var(--hairline-strong);
+  }
+
+  /* Status bar uses dark accents */
+  :root[data-theme="dark"] .proto-status {
+    background: var(--bg-elevated);
+    border: 1px solid var(--hairline);
+    box-shadow: var(--shadow-card);
+  }
+
+  /* Save current view: dashed → use accent in dark */
+  :root[data-theme="dark"] .save-view-btn,
+  :root[data-theme="dark"] .stage-add-row,
+  :root[data-theme="dark"] .dt-add-subtask {
+    border-color: var(--hairline-strong);
+  }
+
+  /* Goal bar / mission bar tracks slightly lighter in dark for contrast */
+  :root[data-theme="dark"] .widget-goals .goal-bar,
+  :root[data-theme="dark"] .widget-missions .mission-bar,
+  :root[data-theme="dark"] .widget-capacity .cap-row .bar,
+  :root[data-theme="dark"] .widget-health .signal {
+    background: rgba(240,236,226,0.06);
+  }
+
+  /* Code/keyboard hints */
+  :root[data-theme="dark"] code,
+  :root[data-theme="dark"] .kbd {
+    background: var(--bg-soft);
+    border-color: var(--hairline);
+  }
+
+  /* Pinned context card subtle accent for dark */
+  :root[data-theme="dark"] .dt-chat-pin {
+    background: linear-gradient(135deg, rgba(217,162,107,0.04) 0%, var(--bg-panel) 60%);
+  }
+
+  /* Sunrun-tinted cards stay purple but dimmer */
+  :root[data-theme="dark"] .pf-sunrun,
+  :root[data-theme="dark"] .dt-sunrun-card,
+  :root[data-theme="dark"] .dt-status-card {
+    background: linear-gradient(135deg, rgba(159,143,213,0.10) 0%, var(--bg-panel) 70%);
+    border-color: rgba(159,143,213,0.25);
+  }
+
+  /* Rationale section — warm tint in dark */
+  :root[data-theme="dark"] .dt-rationale-section {
+    background: linear-gradient(135deg, rgba(217,162,107,0.06) 0%, var(--bg-panel) 70%);
+  }
+
+  /* Auto-banner */
+  :root[data-theme="dark"] .dt-auto-banner {
+    background: linear-gradient(135deg, rgba(159,143,213,0.10) 0%, var(--bg-panel) 70%);
+    border-color: rgba(159,143,213,0.25);
+  }
+
+  /* Clarification card — warm tint */
+  :root[data-theme="dark"] .dt-clarify-card {
+    background: linear-gradient(135deg, rgba(217,162,107,0.08) 0%, var(--bg-panel) 70%);
+    border-color: rgba(217,162,107,0.30);
+  }
+
+  /* Backlog mega drop — accent tint */
+  :root[data-theme="dark"] .backlog-mega-drop {
+    background: rgba(217,162,107,0.10);
+    border-color: var(--accent);
+  }
+
+  /* Transcripts summary card — warm gradient in dark */
+  :root[data-theme="dark"] .transcripts-summary {
+    background: linear-gradient(135deg, rgba(217,162,107,0.06) 0%, transparent 100%);
+  }
+  :root[data-theme="dark"] .transcripts-summary .ts-decisions-link {
+    background: var(--bg-panel);
+    border-color: var(--hairline);
   }
   * { box-sizing: border-box; }
   html { scroll-behavior: smooth; }
@@ -756,10 +986,31 @@
     color: var(--accent);
     font-weight: 600;
   }
+  .page-tabs-bar .theme-toggle {
+    margin-left: auto;
+    width: 30px; height: 30px;
+    background: var(--bg-soft);
+    border: 1px solid var(--hairline);
+    border-radius: 6px;
+    cursor: pointer;
+    color: var(--ink-soft);
+    font-size: 14px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s;
+    padding: 0;
+    font-family: inherit;
+  }
+  .page-tabs-bar .theme-toggle:hover {
+    color: var(--accent);
+    border-color: var(--accent);
+    background: var(--accent-soft);
+  }
   .page-tabs-bar .tabs {
     display: flex;
     gap: 4px;
-    margin-left: auto;
+    margin-left: 12px;
     background: var(--bg-soft);
     padding: 3px;
     border-radius: 8px;
@@ -4548,6 +4799,9 @@
 
 <header class="page-tabs-bar">
   <div class="brand">Sun OS · Sunline · Create-task flow</div>
+  <button class="theme-toggle" id="theme-toggle" title="Toggle light / dark" aria-label="Toggle theme">
+    <span class="theme-icon">◐</span>
+  </button>
   <nav class="tabs" role="tablist">
     <button class="tab active" data-tab="spec" role="tab">Spec</button>
     <button class="tab" data-tab="prototype" role="tab">Prototype</button>
@@ -6085,6 +6339,24 @@ Last updated: May 2026 · Companion to <code>wayeez_task_component_spec.html</co
     });
   }, { rootMargin: '-20% 0px -70% 0px' });
   sections.forEach(s => tocObserver.observe(s));
+
+  // === THEME TOGGLE (light / dark) ===
+  (function initTheme() {
+    const stored = localStorage.getItem('sun-os-theme');
+    if (stored) {
+      document.documentElement.setAttribute('data-theme', stored);
+    }
+    // (else: HTML attribute already set to "dark" by default)
+    const toggle = document.getElementById('theme-toggle');
+    if (toggle) {
+      toggle.addEventListener('click', () => {
+        const cur = document.documentElement.getAttribute('data-theme');
+        const next = cur === 'dark' ? 'light' : 'dark';
+        document.documentElement.setAttribute('data-theme', next);
+        localStorage.setItem('sun-os-theme', next);
+      });
+    }
+  })();
 
   // === TAB SWITCHING ===
   const tabs = document.querySelectorAll('.page-tabs-bar .tab');
