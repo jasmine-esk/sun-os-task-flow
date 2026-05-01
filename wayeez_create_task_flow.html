@@ -789,9 +789,9 @@
 
   /* ============ PROTOTYPE VIEW ============ */
   #prototype-view {
-    max-width: 1200px;
+    max-width: 1480px;
     margin: 0 auto;
-    padding: 40px 40px 80px;
+    padding: 40px 32px 80px;
   }
   @media (max-width: 900px) {
     #prototype-view { padding: 30px 20px 60px; }
@@ -2306,6 +2306,362 @@
     transition: opacity 0.12s;
   }
   .dt-subtask-row .row-main:hover .nav-arrow { opacity: 0.55; }
+
+  /* === 3-panel layout: backlog rail · stage canvas · widget rail === */
+  .stage-3panel {
+    display: grid;
+    grid-template-columns: 230px 1fr 290px;
+    gap: 1px;
+    background: var(--hairline);
+  }
+  @media (max-width: 1100px) {
+    .stage-3panel { grid-template-columns: 200px 1fr 240px; }
+  }
+  @media (max-width: 900px) {
+    .stage-3panel { grid-template-columns: 1fr; }
+    .stage-rail-left, .stage-rail-right { border-bottom: 1px solid var(--hairline); }
+  }
+  .stage-rail-left, .stage-rail-right {
+    background: var(--bg-panel);
+    padding: 14px 14px 16px;
+    font-size: 12.5px;
+    min-height: 100%;
+  }
+  .stage-rail-left h6, .stage-rail-right h6 {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--ink-faint);
+    font-weight: 700;
+    margin: 0 0 11px;
+    padding: 4px 4px 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .stage-rail-left h6 .add-link, .stage-rail-right h6 .add-link {
+    color: var(--ink-faint);
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 12px;
+    background: none;
+    border: none;
+    padding: 0;
+  }
+  .stage-rail-left h6 .add-link:hover, .stage-rail-right h6 .add-link:hover {
+    color: var(--accent);
+  }
+
+  /* Backlog buckets */
+  .backlog-bucket { margin-bottom: 2px; }
+  .backlog-bucket-head {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 8px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 12px;
+    color: var(--ink-soft);
+    user-select: none;
+  }
+  .backlog-bucket-head:hover { background: var(--bg-soft); }
+  .backlog-bucket-head .arrow {
+    font-size: 9px;
+    transition: transform 0.15s;
+    color: var(--ink-faint);
+    flex-shrink: 0;
+  }
+  .backlog-bucket.open .backlog-bucket-head .arrow {
+    transform: rotate(90deg);
+  }
+  .backlog-bucket-head .ic { font-size: 13px; width: 16px; flex-shrink: 0; }
+  .backlog-bucket-head .name { flex: 1; font-weight: 600; color: var(--ink); letter-spacing: 0.01em; }
+  .backlog-bucket-head .count {
+    font-size: 10px;
+    color: var(--ink-faint);
+    font-family: 'SF Mono', monospace;
+    background: var(--bg-soft);
+    padding: 1px 6px;
+    border-radius: 3px;
+    font-weight: 600;
+  }
+  .backlog-items { padding-left: 22px; display: none; padding-bottom: 4px; }
+  .backlog-bucket.open .backlog-items { display: block; }
+  .backlog-item {
+    font-size: 11.5px;
+    padding: 5px 8px;
+    margin: 1px 0;
+    border-radius: 4px;
+    cursor: grab;
+    color: var(--ink-soft);
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    line-height: 1.3;
+  }
+  .backlog-item:hover {
+    background: var(--bg-soft);
+    color: var(--ink);
+  }
+  .backlog-item:active { cursor: grabbing; }
+  .backlog-item .ic { font-size: 11px; flex-shrink: 0; opacity: 0.7; }
+  .backlog-item .ttl { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .backlog-item .pri-mini {
+    font-size: 8.5px;
+    font-family: 'SF Mono', monospace;
+    font-weight: 700;
+    padding: 1px 4px;
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+  .backlog-item .pri-mini.p1 { background: rgba(184,90,74,0.15); color: var(--danger); }
+  .backlog-item .pri-mini.p2 { background: rgba(194,106,63,0.15); color: var(--warn); }
+  .backlog-item .pri-mini.p3 { background: rgba(180,122,63,0.15); color: var(--accent); }
+  .backlog-search {
+    background: var(--bg);
+    border: 1px solid var(--hairline);
+    border-radius: 5px;
+    padding: 6px 9px;
+    font-size: 11.5px;
+    width: 100%;
+    margin-bottom: 8px;
+    font-family: inherit;
+    outline: none;
+    color: var(--ink);
+  }
+  .backlog-search:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 2px var(--accent-soft);
+  }
+  .backlog-search::placeholder { color: var(--ink-faint); }
+
+  /* Widgets */
+  .widget {
+    background: white;
+    border: 1px solid var(--hairline);
+    border-radius: 9px;
+    padding: 13px 14px;
+    margin-bottom: 9px;
+  }
+  .widget h6 {
+    font-size: 9.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--ink-faint);
+    font-weight: 700;
+    margin: 0 0 10px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .widget h6 .meta-text {
+    color: var(--ink-soft);
+    font-weight: 600;
+    font-size: 9.5px;
+  }
+
+  /* Health widget */
+  .widget-health .health-row {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    margin-bottom: 4px;
+  }
+  .widget-health .health-score {
+    font-family: 'Tiempos Headline', Georgia, serif;
+    font-size: 32px;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    line-height: 1;
+    color: var(--ink);
+  }
+  .widget-health .health-out-of {
+    font-size: 13px;
+    color: var(--ink-faint);
+    font-family: 'SF Mono', monospace;
+  }
+  .widget-health .health-trend {
+    font-size: 10.5px;
+    color: var(--good);
+    font-weight: 600;
+    margin-bottom: 12px;
+  }
+  .widget-health .health-trend.down { color: var(--danger); }
+  .widget-health .health-trend.flat { color: var(--ink-faint); }
+  .widget-health .signals {
+    display: flex;
+    gap: 3px;
+  }
+  .widget-health .signal {
+    flex: 1;
+    height: 5px;
+    border-radius: 2px;
+    background: var(--bg-soft);
+  }
+  .widget-health .signal.good { background: var(--good); }
+  .widget-health .signal.warn { background: var(--warn); }
+  .widget-health .signal.bad { background: var(--danger); }
+  .widget-health .signal-labels {
+    display: flex;
+    gap: 3px;
+    margin-top: 5px;
+    font-size: 8.5px;
+    color: var(--ink-faint);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+  .widget-health .signal-labels span { flex: 1; text-align: center; }
+
+  /* Capacity widget */
+  .widget-capacity .cap-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 7px;
+    font-size: 11px;
+  }
+  .widget-capacity .cap-row:last-child { margin-bottom: 0; }
+  .widget-capacity .cap-row .av {
+    width: 18px; height: 18px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 9px;
+    font-weight: 600;
+    color: var(--ink);
+    flex-shrink: 0;
+  }
+  .widget-capacity .cap-row .who {
+    width: 52px;
+    font-weight: 500;
+    color: var(--ink);
+    font-size: 11px;
+  }
+  .widget-capacity .cap-row .bar {
+    flex: 1;
+    height: 6px;
+    background: var(--bg-soft);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .widget-capacity .cap-row .bar .fill {
+    height: 100%;
+    background: var(--accent);
+    border-radius: 3px;
+  }
+  .widget-capacity .cap-row .bar .fill.over { background: var(--danger); }
+  .widget-capacity .cap-row .bar .fill.under { background: var(--good); }
+  .widget-capacity .cap-row .pct {
+    font-size: 10px;
+    color: var(--ink-soft);
+    font-family: 'SF Mono', monospace;
+    width: 38px;
+    text-align: right;
+    flex-shrink: 0;
+    font-weight: 500;
+  }
+
+  /* Mission split widget */
+  .widget-missions .mission-bar {
+    display: flex;
+    height: 9px;
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 9px;
+    background: var(--bg-soft);
+  }
+  .widget-missions .mission-bar .seg { height: 100%; }
+  .widget-missions .mission-bar .seg.pipeline { background: #6F5FA8; }
+  .widget-missions .mission-bar .seg.research { background: #B47A3F; }
+  .widget-missions .mission-bar .seg.audit { background: #C26A3F; }
+  .widget-missions .mission-bar .seg.creative { background: #5A8F5A; }
+  .widget-missions .mission-bar .seg.ops { background: #888; }
+  .widget-missions .legend {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5px 9px;
+    font-size: 10.5px;
+  }
+  .widget-missions .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--ink-soft);
+  }
+  .widget-missions .legend-item .dot {
+    width: 7px; height: 7px; border-radius: 2px;
+    flex-shrink: 0;
+  }
+  .widget-missions .legend-item .name { flex: 1; }
+  .widget-missions .legend-item .ct {
+    color: var(--ink-faint);
+    font-family: 'SF Mono', monospace;
+    font-size: 9.5px;
+    font-weight: 600;
+  }
+
+  /* Goals widget */
+  .widget-goals .goal-row {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    margin-bottom: 9px;
+    font-size: 11px;
+  }
+  .widget-goals .goal-row:last-child { margin-bottom: 0; }
+  .widget-goals .goal-name {
+    color: var(--ink);
+    font-weight: 500;
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+    line-height: 1.3;
+  }
+  .widget-goals .goal-name .pct {
+    font-size: 10px;
+    color: var(--ink-faint);
+    font-family: 'SF Mono', monospace;
+    flex-shrink: 0;
+    font-weight: 600;
+  }
+  .widget-goals .goal-bar {
+    height: 4px;
+    background: var(--bg-soft);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .widget-goals .goal-bar .fill { height: 100%; background: var(--accent); border-radius: 2px; }
+  .widget-goals .goal-bar .fill.good { background: var(--good); }
+  .widget-goals .goal-bar .fill.warn { background: var(--warn); }
+  .widget-goals .goal-bar .fill.bad { background: var(--danger); }
+
+  /* Sunrun status widget */
+  .widget-sunrun .sr-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 4px 0;
+    font-size: 11.5px;
+    border-bottom: 1px solid rgba(0,0,0,0.04);
+  }
+  .widget-sunrun .sr-row:last-child { border-bottom: none; }
+  .widget-sunrun .sr-row .label {
+    color: var(--ink-soft);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .widget-sunrun .sr-row .label .ic { font-size: 11px; }
+  .widget-sunrun .sr-row .num {
+    font-weight: 600;
+    font-size: 12.5px;
+    color: var(--ink);
+    font-family: 'SF Mono', monospace;
+  }
+  .widget-sunrun .sr-row .num.warn { color: var(--warn); }
+  .widget-sunrun .sr-row .num.run { color: var(--sunrun); }
 
   /* === Fixed-top in detail panel + Chat/Info tabs === */
   .proto-detail-panel { display: flex; flex-direction: column; }
@@ -4310,7 +4666,86 @@ Last updated: May 2026 · Companion to <code>wayeez_task_component_spec.html</co
     <span class="week-label">Week of May 4</span>
     <button class="global-create" id="proto-global-create">+ Create task <span class="keyboard-hint">⌘N</span></button>
   </div>
-  <div class="stage-canvas">
+  <div class="stage-3panel">
+    <!-- LEFT RAIL: Backlog library -->
+    <aside class="stage-rail-left">
+      <h6>Backlog <button class="add-link" title="Add">+</button></h6>
+      <input type="text" class="backlog-search" placeholder="Search backlog…" />
+
+      <div class="backlog-bucket open" data-bucket="inbox">
+        <div class="backlog-bucket-head" onclick="this.parentElement.classList.toggle('open')">
+          <span class="arrow">▶</span>
+          <span class="ic">📥</span>
+          <span class="name">Inbox</span>
+          <span class="count">4</span>
+        </div>
+        <div class="backlog-items">
+          <div class="backlog-item" draggable="true"><span class="ic">💬</span><span class="ttl">Slack: Sundex naming feedback</span></div>
+          <div class="backlog-item" draggable="true"><span class="ic">🎙</span><span class="ttl">Mtg: design crit notes Apr 28</span></div>
+          <div class="backlog-item" draggable="true"><span class="ic">✉</span><span class="ttl">Email: investor follow-up draft</span></div>
+          <div class="backlog-item" draggable="true"><span class="ic">💾</span><span class="ttl">Save: "tools should be invisible"</span></div>
+        </div>
+      </div>
+
+      <div class="backlog-bucket" data-bucket="deferred">
+        <div class="backlog-bucket-head" onclick="this.parentElement.classList.toggle('open')">
+          <span class="arrow">▶</span>
+          <span class="ic">⏭</span>
+          <span class="name">Deferred</span>
+          <span class="count">7</span>
+        </div>
+        <div class="backlog-items">
+          <div class="backlog-item" draggable="true"><span class="pri-mini p2">P2</span><span class="ttl">Wayeez 1:1 monthly review</span></div>
+          <div class="backlog-item" draggable="true"><span class="pri-mini p3">P3</span><span class="ttl">Sundex roadmap v1 draft</span></div>
+          <div class="backlog-item" draggable="true"><span class="ic">📋</span><span class="ttl">Sunpoke v0.3 spec writeup</span></div>
+          <div class="backlog-item" draggable="true"><span class="ic">🎯</span><span class="ttl">Q3 OKR planning</span></div>
+        </div>
+      </div>
+
+      <div class="backlog-bucket" data-bucket="drafts">
+        <div class="backlog-bucket-head" onclick="this.parentElement.classList.toggle('open')">
+          <span class="arrow">▶</span>
+          <span class="ic">📝</span>
+          <span class="name">Drafts</span>
+          <span class="count">2</span>
+        </div>
+        <div class="backlog-items">
+          <div class="backlog-item" draggable="true"><span class="ic">✨</span><span class="ttl">Sunrun: weekly metrics digest</span></div>
+          <div class="backlog-item" draggable="true"><span class="ic">📋</span><span class="ttl">Aether handoff doc — partial</span></div>
+        </div>
+      </div>
+
+      <div class="backlog-bucket" data-bucket="magic">
+        <div class="backlog-bucket-head" onclick="this.parentElement.classList.toggle('open')">
+          <span class="arrow">▶</span>
+          <span class="ic">🔮</span>
+          <span class="name">Magic / Future</span>
+          <span class="count">3</span>
+        </div>
+        <div class="backlog-items">
+          <div class="backlog-item" draggable="true"><span class="ic">🎙</span><span class="ttl">Sunspoke meeting auto-summarize</span></div>
+          <div class="backlog-item" draggable="true"><span class="ic">📊</span><span class="ttl">Sun OS shareable dashboards</span></div>
+          <div class="backlog-item" draggable="true"><span class="ic">🤖</span><span class="ttl">Sunrun agent self-improving rubric</span></div>
+        </div>
+      </div>
+
+      <div class="backlog-bucket" data-bucket="done">
+        <div class="backlog-bucket-head" onclick="this.parentElement.classList.toggle('open')">
+          <span class="arrow">▶</span>
+          <span class="ic">✓</span>
+          <span class="name">Done this week</span>
+          <span class="count">5</span>
+        </div>
+        <div class="backlog-items">
+          <div class="backlog-item" draggable="true" style="opacity:0.55; text-decoration:line-through;"><span class="ic">✉</span><span class="ttl">Aether sunset email batch 1</span></div>
+          <div class="backlog-item" draggable="true" style="opacity:0.55; text-decoration:line-through;"><span class="ic">📞</span><span class="ttl">Investor call — Karim L.</span></div>
+          <div class="backlog-item" draggable="true" style="opacity:0.55; text-decoration:line-through;"><span class="ic">🎨</span><span class="ttl">Sunline mockup v1</span></div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- CENTER: Stage canvas -->
+    <div class="stage-canvas">
     <!-- Jazz column -->
     <div class="stage-column" data-owner="jazz">
       <div class="col-head">
@@ -4358,7 +4793,118 @@ Last updated: May 2026 · Companion to <code>wayeez_task_component_spec.html</co
       </div>
       <div class="stage-add-row" data-owner="sunrun">+ Add mission</div>
     </div>
-  </div>
+    </div><!-- /.stage-canvas -->
+
+    <!-- RIGHT RAIL: Widgets -->
+    <aside class="stage-rail-right">
+      <h6>Status <button class="add-link" title="Add widget">+</button></h6>
+
+      <div class="widget widget-health">
+        <h6>Team health <span class="meta-text">↑ +4 wk/wk</span></h6>
+        <div class="health-row">
+          <span class="health-score">78</span>
+          <span class="health-out-of">/ 100</span>
+        </div>
+        <div class="health-trend">↑ Trending up · capacity recovering</div>
+        <div class="signals">
+          <div class="signal good" title="Capacity"></div>
+          <div class="signal good" title="Burn rate"></div>
+          <div class="signal warn" title="Goal pace"></div>
+          <div class="signal good" title="Decisions"></div>
+          <div class="signal warn" title="Pivots"></div>
+        </div>
+        <div class="signal-labels">
+          <span>cap</span><span>burn</span><span>goal</span><span>dec</span><span>pivot</span>
+        </div>
+      </div>
+
+      <div class="widget widget-capacity">
+        <h6>Capacity this week</h6>
+        <div class="cap-row">
+          <div class="av" style="background: var(--owner-jazz);">J</div>
+          <div class="who">Jazz</div>
+          <div class="bar"><div class="fill over" style="width: 105%;"></div></div>
+          <div class="pct">42 / 40h</div>
+        </div>
+        <div class="cap-row">
+          <div class="av" style="background: var(--owner-wayeez);">W</div>
+          <div class="who">Wayeez</div>
+          <div class="bar"><div class="fill" style="width: 75%;"></div></div>
+          <div class="pct">30 / 40h</div>
+        </div>
+        <div class="cap-row">
+          <div class="av" style="background: var(--owner-michael);">M</div>
+          <div class="who">Michael</div>
+          <div class="bar"><div class="fill under" style="width: 55%;"></div></div>
+          <div class="pct">22 / 40h</div>
+        </div>
+        <div class="cap-row">
+          <div class="av" style="background: var(--owner-sunrun);">✨</div>
+          <div class="who">Sunrun</div>
+          <div class="bar"><div class="fill" style="width: 60%;"></div></div>
+          <div class="pct">~$8 / wk</div>
+        </div>
+      </div>
+
+      <div class="widget widget-missions">
+        <h6>Mission split <span class="meta-text">12 active</span></h6>
+        <div class="mission-bar">
+          <div class="seg pipeline" style="width: 35%;"></div>
+          <div class="seg research" style="width: 25%;"></div>
+          <div class="seg audit" style="width: 15%;"></div>
+          <div class="seg creative" style="width: 15%;"></div>
+          <div class="seg ops" style="width: 10%;"></div>
+        </div>
+        <div class="legend">
+          <div class="legend-item"><span class="dot" style="background:#6F5FA8;"></span><span class="name">Pipeline</span><span class="ct">4</span></div>
+          <div class="legend-item"><span class="dot" style="background:#B47A3F;"></span><span class="name">Research</span><span class="ct">3</span></div>
+          <div class="legend-item"><span class="dot" style="background:#C26A3F;"></span><span class="name">Audit</span><span class="ct">2</span></div>
+          <div class="legend-item"><span class="dot" style="background:#5A8F5A;"></span><span class="name">Creative</span><span class="ct">2</span></div>
+          <div class="legend-item"><span class="dot" style="background:#888;"></span><span class="name">Ops</span><span class="ct">1</span></div>
+        </div>
+      </div>
+
+      <div class="widget widget-goals">
+        <h6>Q2 objectives</h6>
+        <div class="goal-row">
+          <div class="goal-name"><span>Aether sunset complete</span><span class="pct">68%</span></div>
+          <div class="goal-bar"><div class="fill" style="width: 68%;"></div></div>
+        </div>
+        <div class="goal-row">
+          <div class="goal-name"><span>Suncraft public launch</span><span class="pct">42%</span></div>
+          <div class="goal-bar"><div class="fill warn" style="width: 42%;"></div></div>
+        </div>
+        <div class="goal-row">
+          <div class="goal-name"><span>Sunrun 5 client missions</span><span class="pct">2 / 5</span></div>
+          <div class="goal-bar"><div class="fill" style="width: 40%;"></div></div>
+        </div>
+        <div class="goal-row">
+          <div class="goal-name"><span>Sunline interface ship</span><span class="pct">85%</span></div>
+          <div class="goal-bar"><div class="fill good" style="width: 85%;"></div></div>
+        </div>
+      </div>
+
+      <div class="widget widget-sunrun">
+        <h6>Sunrun activity</h6>
+        <div class="sr-row">
+          <span class="label"><span class="ic">⚡</span>Running now</span>
+          <span class="num run">1</span>
+        </div>
+        <div class="sr-row">
+          <span class="label"><span class="ic">📥</span>Awaiting your review</span>
+          <span class="num warn">32</span>
+        </div>
+        <div class="sr-row">
+          <span class="label"><span class="ic">✓</span>Completed this week</span>
+          <span class="num">4</span>
+        </div>
+        <div class="sr-row">
+          <span class="label"><span class="ic">💵</span>Spend this week</span>
+          <span class="num">$8.40</span>
+        </div>
+      </div>
+    </aside>
+  </div><!-- /.stage-3panel -->
 </div>
 
 <div class="proto-notes">
